@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ms">
+<html lang="zh">
 
 <head>
 
@@ -1607,15 +1607,9 @@ font-weight:bold;
 
 <select id="studentGrade" onchange="loadStudents()">
 
-<option value="">
-请选择年级
-</option>
-
-<option value="Year 1">
-Year 1
-</option>
-
-</select>
+<option value="">请选择年级</option>
+        <option value="Year 3">Year 3</option>
+    </select>
 
 
 <br>
@@ -1829,38 +1823,227 @@ window.limit = limit;
 
 <script>
 
-const SUBJECT = "Malay";
+const SUBJECT = "Chinese";
 const TEST_TYPE = "Reading";
 
 // 第2部分 JavaScript 会接这里
 const originalWords = [
-"rumah",
-    "sekolah",
-    "makanan",
-    "bermain",
-    "membaca"
+"什么",
+  "词语",
+  "学生",
+  "课文",
+  "句子",
+  "阅读",
+  "内容",
+  "老师",
+  "根据",
+  "单元",
+  "然后",
+  "正确",
+  "我们",
+  "爸爸",
+  "读读",
+  "一个",
+  "问题",
+  "以下",
+  "说说",
+  "回答",
+  "标准",
+  "汉字",
+  "生活",
+  "老虎",
+  "教材",
+  "写出",
+  "可以",
+  "意思",
+  "鸟儿",
+  "我的",
+  "他们",
+  "彩虹",
+  "想想",
+  "橡胶",
+  "填写",
+  "地方",
+  "表达",
+  "理解",
+  "自己",
+  "起来",
+  "故事",
+  "打印",
+  "引导",
+  "答案",
+  "教师",
+  "学习",
+  "认识",
+  "同学",
+  "想象",
+  "哪些",
+  "技能",
+  "第十",
+  "小猫",
+  "方法",
+  "纸船",
+  "竹筒",
+  "喜欢",
+  "说明",
+  "感受",
+  "读音",
+  "生字",
+  "妈妈",
+  "没有",
+  "事情",
+  "识字",
+  "动物",
+  "段落",
+  "课本",
+  "弟弟",
+  "朋友",
+  "活动",
+  "我国",
+  "圈出",
+  "这个",
+  "联想",
+  "如何",
+  "特点",
+  "怎样",
+  "时候",
+  "拔腿就跑",
+  "高楼大厦",
+  "成群结队",
+  "掩耳盗铃",
+  "汪洋大海",
+  "湖光山色",
+  "与众不同",
+  "五颜六色",
+  "胸怀大志",
+  "洗劫一空",
+  "自得其乐",
+  "知恩图报",
+  "唇齿留香",
+  "四面八方",
+  "功不可没",
+  "高高矮矮",
+  "枝繁叶茂",
+  "红砖绿瓦",
+  "挨饥受冻",
+  "一个箭步",
+  "刻苦耐劳"
 ];
 
 const students = {
 
-"Year 1":[
-"Ryna",
-"Mikayla",
-"Eden",
-"Maxton",
-"Candy",
-"Shannon",
-"Jayden Liew"
+"Year 3":[
+"Gracelyn",
+        "Eyrina",
+        "Averlyn",
+	"Adrieal",
+	"Ryan Chin",
+	"Renee"
 ]
 
 };
 
 const phrases = [
-"Ini rumah saya.",
-    "Saya pergi ke sekolah.",
-    "Makanan itu sedap.",
-    "Mereka bermain bola.",
-    "Adik sedang membaca."   
+"什么",
+  "词语",
+  "学生",
+  "课文",
+  "句子",
+  "阅读",
+  "内容",
+  "老师",
+  "根据",
+  "单元",
+  "然后",
+  "正确",
+  "我们",
+  "爸爸",
+  "读读",
+  "一个",
+  "问题",
+  "以下",
+  "说说",
+  "回答",
+  "标准",
+  "汉字",
+  "生活",
+  "老虎",
+  "教材",
+  "写出",
+  "可以",
+  "意思",
+  "鸟儿",
+  "我的",
+  "他们",
+  "彩虹",
+  "想想",
+  "橡胶",
+  "填写",
+  "地方",
+  "表达",
+  "理解",
+  "自己",
+  "起来",
+  "故事",
+  "打印",
+  "引导",
+  "答案",
+  "教师",
+  "学习",
+  "认识",
+  "同学",
+  "想象",
+  "哪些",
+  "技能",
+  "第十",
+  "小猫",
+  "方法",
+  "纸船",
+  "竹筒",
+  "喜欢",
+  "说明",
+  "感受",
+  "读音",
+  "生字",
+  "妈妈",
+  "没有",
+  "事情",
+  "识字",
+  "动物",
+  "段落",
+  "课本",
+  "弟弟",
+  "朋友",
+  "活动",
+  "我国",
+  "圈出",
+  "这个",
+  "联想",
+  "如何",
+  "特点",
+  "怎样",
+  "时候",
+  "拔腿就跑",
+  "高楼大厦",
+  "成群结队",
+  "掩耳盗铃",
+  "汪洋大海",
+  "湖光山色",
+  "与众不同",
+  "五颜六色",
+  "胸怀大志",
+  "洗劫一空",
+  "自得其乐",
+  "知恩图报",
+  "唇齿留香",
+  "四面八方",
+  "功不可没",
+  "高高矮矮",
+  "枝繁叶茂",
+  "红砖绿瓦",
+  "挨饥受冻",
+  "一个箭步",
+  "刻苦耐劳"
 ];
 
 let words = [];
@@ -1906,7 +2089,7 @@ let currentStudentName = "";
 
 let currentStudentGrade = "";
 
-let currentTestName = "BM_P1_Reading_Set 1";
+let currentTestName = "BC_P3_Reading_Set 1";
 
 function getTestID(){
 
@@ -2135,7 +2318,7 @@ function watchBattle(){
 
             renderBattle();
 
-        },1000);
+        },10000);
 
 }
 
@@ -2215,7 +2398,7 @@ async function startBattle(){
 
         }
 
-    },1000);
+    },10000);
 
 }
 
@@ -2531,7 +2714,7 @@ return;
 
 recognition = new SpeechRecognition();
 
-recognition.lang="ms-MY";
+recognition.lang="zh-CN";
 
 recognition.continuous=true;
 
@@ -2787,139 +2970,263 @@ showResult();
 // =======================
 
 
+function checkAnswer(text){
 
-function checkAnswer(text) {
-    if (isChecking) {
-        return;
-    }
-
-    isChecking = true;
-
-    if (!words[current]) {
-        isChecking = false;
-        return;
-    }
-
-    // 标准化马来文：统一大小写、标点和空格
-    function normalizeMalay(value) {
-        return String(value || "")
-            .toLowerCase()
-            .replace(/[.,!?;:"“”‘’()[\]{}]/g, " ")
-            .replace(/\s+/g, " ")
-            .trim();
-    }
-
-    const answer = normalizeMalay(words[current]);
-    const cleanText = normalizeMalay(text);
-
-    console.log("学生读出的内容:", cleanText);
-    console.log("目标词汇:", answer);
-
-    // 没有识别到语音，不直接判对
-    if (!cleanText || !answer) {
-        isChecking = false;
-        resultDiv.innerHTML = "❌ 没有听清楚，请再试一次";
-        return;
-    }
-
-    let similarity = 0;
-
-    // 优先检查完整词汇是否出现在识别结果中
-    // 例如目标是 rumah，识别结果是 "ini rumah saya"
-    const recognizedWords = cleanText.split(" ");
-
-    if (recognizedWords.includes(answer)) {
-        similarity = 1;
-    } else {
-        // 如果没有完全匹配，再比较相似发音
-        // 只比较识别结果中的单个词，避免整句话影响分数
-        for (const spokenWord of recognizedWords) {
-            if (!spokenWord) continue;
-
-            const maxLength = Math.max(
-                answer.length,
-                spokenWord.length
-            );
-
-            if (maxLength === 0) continue;
-
-            const distance = levenshtein(answer, spokenWord);
-
-            const wordSimilarity =
-                1 - distance / maxLength;
-
-            if (wordSimilarity > similarity) {
-                similarity = wordSimilarity;
-            }
-        }
-    }
-
-    // 判断标准：完整匹配优先；
-    // 相似度容错只用于较长词汇，避免短词误判
-    let threshold;
-
-    if (answer.length <= 3) {
-        threshold = 0.90;
-    } else {
-        threshold = 0.80;
-    }
-
-    console.log("相似度:", similarity);
-    console.log("判断标准:", threshold);
-
-    if (similarity >= threshold) {
-        // ===== 答对 =====
-        stopListening();
-        isChecking = false;
-
-        correct++;
-
-        updateBattleFirebase();
-
-        testedWordsToday.push({
-            word: words[current],
-            result: "correct"
-        });
-
-        // 从不会读的词汇列表移除
-        wrongWords = wrongWords.filter(
-            word => word !== words[current]
-        );
-
-        document.body.className = "correct";
-        resultDiv.innerHTML = "✅ Betul! 正确！";
-
-        setTimeout(() => {
-            current++;
-
-            if (current < words.length) {
-                showWord();
-            } else {
-                showResult();
-            }
-        }, 800);
-
-    } else {
-        // ===== 答错：允许学生重读 =====
-        isChecking = false;
-
-        const currentWord = words[current];
-
-        const exist = testedWordsToday.find(
-            item => item.word === currentWord
-        );
-
-        if (!exist) {
-            testedWordsToday.push({
-                word: currentWord,
-                result: "wrong"
-            });
-        }
-
-        document.body.className = "incorrect";
-        resultDiv.innerHTML = "❌ Cuba lagi! 再试一次";
-    }
+if(isChecking){
+return;
 }
+
+isChecking = true;
+
+if(!words[current]){
+isChecking = false;
+return;
+}
+
+const answer = normalizeChinese(words[current]);
+
+const cleanText = normalizeChinese(text);
+
+
+// =======================
+// 棱柱体 / 棱锥体 语音识别修正
+// =======================
+
+const specialFix = {
+
+"冷柱体":"棱柱体",
+"人柱体":"棱柱体",
+"能柱体":"棱柱体",
+
+"冷锥体":"棱锥体",
+"人锥体":"棱锥体",
+"能锥体":"棱锥体",
+
+"只是":"指示",
+
+"笔划":"笔画",
+
+"由来由去":"游来游去",
+
+"所以说":"说一说",
+
+"栗子":"例子",
+"粒子":"例子",
+"荔枝":"例子",
+
+"想像":"想象",
+
+"热漆":"日期",
+
+"它们":"它们",
+"他们":"它们",
+"她们":"它们",
+"他们":"她们",
+"它们":"她们",
+
+"20":"二十",
+"12":"十二"
+
+};
+
+
+let fixedText = cleanText;
+
+for(let wrong in specialFix){
+
+if(cleanText.includes(wrong)){
+
+fixedText = specialFix[wrong];
+break;
+
+}
+
+}
+
+
+console.log(
+"学生:",
+cleanText,
+"答案:",
+answer
+);
+
+
+let similarity;
+
+
+// ⭐ 只要学生读出的内容包含题目，就算正确
+if(cleanText.includes(answer)){
+
+similarity = 1;
+
+}
+
+
+// ⭐ 有什么 / 由什么 互相接受
+else if(
+(answer === "有什么" && fixedText === "由什么") ||
+(answer === "由什么" && fixedText === "有什么")
+){
+
+similarity = 1;
+
+}
+
+
+// ⭐ 特别处理：棱柱体 / 棱锥体
+else if(answer === "棱柱体" && fixedText.includes("柱体")){
+
+similarity = 1;
+
+}
+
+else if(answer === "棱锥体" && fixedText.includes("锥体")){
+
+similarity = 1;
+
+}
+
+
+// ⭐ 原本单字规则
+else if(answer.length === 1 && cleanText.includes(answer)){
+
+similarity = 1;
+
+}
+
+else{
+
+similarity = chineseSimilarity(
+fixedText,
+answer
+);
+
+}
+
+console.log(
+"中文相似度:",
+similarity
+);
+
+// 中文判断标准
+let threshold = 0.75;
+
+// 如果是非常短的单字
+if(answer.length === 1){
+
+threshold = 0.7;
+
+}
+
+// 两个字的词
+else if(answer.length === 2){
+
+threshold = 0.75;
+
+}
+
+// 三个或以上
+else{
+
+threshold = 0.70;
+
+}
+
+
+if(similarity >= threshold){
+
+stopListening();
+
+isChecking = false;
+
+correct++;
+
+updateBattleFirebase();
+
+testedWordsToday.push({
+
+word: words[current],
+
+result:"correct"
+
+});
+
+
+    // 加这里
+    wrongWords = wrongWords.filter(
+        word => word !== words[current]
+    );
+
+document.body.className =
+"correct";
+
+resultDiv.innerHTML =
+"✅ 正确！";
+
+
+setTimeout(()=>{
+
+current++;
+
+if(current < words.length){
+
+showWord();
+
+}
+
+else{
+
+showResult();
+
+}
+
+},800);
+
+
+}
+
+else{
+
+isChecking = false;
+
+const currentWord =
+words[current];
+
+
+const exist =
+testedWordsToday.find(
+x => x.word === currentWord
+);
+
+
+if(!exist){
+
+testedWordsToday.push({
+
+word: currentWord,
+
+result:"wrong"
+
+});
+
+}
+
+document.body.className =
+"incorrect";
+
+
+resultDiv.innerHTML =
+"❌ 再试一次";
+
+}
+
+}
+
+
+
+
+
 
 // =======================
 // 过滤重复
@@ -3194,6 +3501,39 @@ resultDiv.innerHTML =
 
    </div>
 
+   
+<!-- 会读的词汇 -->
+<div class="wrong-box" style="background:#d8ffd8;">
+
+    <div class="wrong-icon">
+        ✔️
+    </div>
+
+    <div class="wrong-title-cn">
+        会读的词汇
+    </div>
+
+    <div class="wrong-title-en">
+        Words Able to Read
+    </div>
+
+    <div class="wrong-title-bm">
+        Perkataan yang Dapat Dibaca
+    </div>
+
+    <div class="wrong-word" style="background:rgba(255,255,255,0.6); color:#2e7d32;">
+
+        ${
+            [...new Set(
+                testedWordsToday
+                    .filter(item => item.result === "correct")
+                    .map(item => item.word)
+            )].join(", ") || "-"
+        }
+
+    </div>
+
+</div>
 
 
    <!-- 不会读的词汇 -->
@@ -3386,65 +3726,50 @@ return text;
 // 选择范围
 // =======================
 
+
 function selectRange(){
 
+    let start = prompt("请输入开始词汇或序号");
 
+    // 点击 Cancel 时，不进行任何操作
+    if(start === null) return;
 
-let start =
-prompt(
-"请输入开始词汇"
-);
+    let end = prompt("请输入结束词汇或序号");
 
+    // 点击 Cancel 时，不进行任何操作
+    if(end === null) return;
 
+    start = start.trim();
+    end = end.trim();
 
-let end =
-prompt(
-"请输入结束词汇"
-);
+    // 支持输入词汇，也支持输入序号（从 1 开始）
+    let startIndex = /^\d+$/.test(start)
+        ? Number(start) - 1
+        : originalWords.indexOf(start);
 
+    let endIndex = /^\d+$/.test(end)
+        ? Number(end) - 1
+        : originalWords.indexOf(end);
 
+    // 检查输入是否有效
+    if(
+        startIndex < 0 ||
+        endIndex < 0 ||
+        startIndex >= originalWords.length ||
+        endIndex >= originalWords.length ||
+        startIndex > endIndex
+    ){
+        alert("词汇或序号无效，请重新输入");
+        return;
+    }
 
-let startIndex =
-originalWords.indexOf(start);
+    // 防止刷新导致进度消失
+    selectedRange = originalWords.slice(
+        startIndex,
+        endIndex + 1
+    );
 
-
-
-let endIndex =
-originalWords.indexOf(end);
-
-
-
-
-if(
-startIndex===-1 ||
-endIndex===-1 ||
-startIndex>endIndex
-){
-
-
-alert("词汇不存在");
-
-
-return;
-
-
-}
-
-// =======================
-// 防止刷新导致进度消失
-// =======================
-
-selectedRange =
-originalWords.slice(
-startIndex,
-endIndex+1
-);
-
-
-
-restart();
-
-
+    restart();
 
 }
 
@@ -3914,16 +4239,15 @@ window.db,
 );
 
 
-// 建立成绩资料
+// 只读取当前 TestName 的成绩
 let resultMap = {};
 
-
 resultSnapshot.forEach((doc)=>{
+  const data = doc.data();
 
-const data = doc.data();
-
-resultMap[data.studentName] = data;
-
+  if(data.testName === currentTestName){
+    resultMap[data.studentName] = data;
+  }
 });
 
 
@@ -3935,12 +4259,15 @@ let students = [];
 
 progressSnapshot.forEach((doc)=>{
 
+  const data = doc.data();
 
-const data = doc.data();
+  // 只显示当前 TestName 的学生
+  if(data.testName !== currentTestName){
+    return;
+  }
 
-
-let result =
-resultMap[data.studentName] || {};
+  let result =
+    resultMap[data.studentName] || {};
 
 
 
