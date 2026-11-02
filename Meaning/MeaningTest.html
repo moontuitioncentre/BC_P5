@@ -309,7 +309,7 @@ body.result-mode{
     padding-top:10px;
     padding-bottom:20px;
     box-sizing:border-box;
-    background:#fff7ed;
+    background:#eef3fb;
 }
 
 body.result-mode #testScreen{
@@ -336,33 +336,59 @@ body.result-mode #testScreen{
 }
 
 .stat-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:12px 15px;
-    font-size:18px;
-    border-bottom:1px solid #eee;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:12px 15px;
+font-size:15px;
+border-bottom:1px solid #eee;
 }
+
+
+.stat-row span:first-child{
+
+flex:1;
+text-align:left;
+
+}
+
 
 .stat-row:last-child{
-    border-bottom:none;
+
+border-bottom:none;
+
 }
+
+
 
 .stat-value{
-    font-weight:bold;
-    font-size:22px;
+
+font-weight:bold;
+
+font-size:22px;
+
 }
+
+
 
 .correct-num{
-    color:green;
+
+color:green;
+
 }
+
 
 .wrong-num{
-    color:red;
+
+color:red;
+
 }
 
+
 .rate-num{
-    color:#1565c0;
+
+color:#1565c0;
+
 }
 
 .wrong-box{
@@ -376,37 +402,44 @@ body.result-mode #testScreen{
 }
 
 .wrong-icon{
-    font-size:24px;
-    margin-bottom:4px;
+font-size:24px;
+margin-bottom:4px;
 }
 
 .wrong-title-cn{
-    font-size:17px;
-    font-weight:bold;
-    margin-bottom:3px;
+font-size:17px;
+font-weight:bold;
+margin-bottom:3px;
 }
 
 .wrong-title-en{
-    font-size:16px;
-    font-weight:bold;
-    margin-bottom:3px;
+font-size:16px;
+font-weight:bold;
+margin-bottom:3px;
 }
 
 .wrong-title-bm{
-    font-size:15px;
-    font-weight:bold;
-    margin-bottom:10px;
+font-size:15px;
+font-weight:bold;
+margin-bottom:10px;
 }
 
 .wrong-word{
-    background:rgba(255,255,255,0.45);
-    color:#1565c0;
-    padding:10px 8px;
-    border-radius:12px;
-    font-size:16px;
-    font-weight:bold;
-    line-height:1.5;
-    word-break:break-word;
+background:rgba(255,255,255,0.45);
+
+color:#1565c0;
+
+padding:10px 8px;
+
+border-radius:12px;
+
+font-size:16px;
+
+font-weight:bold;
+
+line-height:1.5;
+
+word-break:break-word;
 }
 
 .result-header-row{
@@ -502,21 +535,26 @@ body.result-mode #testScreen{
 }
 
 .info-label{
-    font-size:13px;
-    color:#555;
-    flex-shrink:0;
+font-size:15px;
+color:#555;
+flex-shrink:0;
 }
 
+
+/* Candy / Test / Date */
 .info-value{
-    font-size:15px;
-    font-weight:bold;
-    color:#0d47a1;
-    background:#dbeafe;
-    padding:4px 8px;
-    border-radius:6px;
-    display:inline-block;
-    white-space:nowrap;
-    border-left:3px solid #1565c0;
+
+font-size:15px;
+font-weight:bold;
+color:#0d47a1;
+background:#dbeafe;
+padding:6px 10px;
+border-radius:6px;
+display:inline-block;
+white-space:nowrap;
+border-left:3px solid #1565c0;
+margin-top:3px;
+
 }
 
 .result-actions{
@@ -989,6 +1027,209 @@ text-align:center;
   opacity: 0.85;
 }
 
+.result-table td:first-child,
+.result-table th:first-child{
+
+    min-width:80px;
+    white-space:normal;
+    word-break:normal;
+    overflow-wrap:normal;
+
+}
+
+/* =====================
+  Live Battle Ranking
+===================== */
+
+#battleRanking{
+
+position:fixed;
+
+top:15px;
+left:50%;
+
+transform:translateX(-50%);
+
+width:calc(100vw - 30px);
+max-width:600px;
+
+min-height:60px;
+max-height:140px;
+
+background:white;
+
+border-radius:15px;
+
+padding:10px;
+
+font-size:13px;
+
+font-weight:bold;
+
+box-shadow:0 5px 15px rgba(0,0,0,0.15);
+
+z-index:9999;
+
+text-align:center;
+
+line-height:1.5;
+
+display:none;
+
+overflow-y:auto;
+
+box-sizing:border-box;
+
+}
+
+.battle-player{
+
+display:inline-block;
+
+background:#f8fafc;
+
+border-radius:8px;
+
+padding:5px 8px;
+
+margin:3px;
+
+white-space:nowrap;
+
+font-size:13px;
+
+}
+
+
+@media(max-width:600px){
+
+#battleRanking{
+
+width:calc(100vw - 20px);
+
+max-width:none;
+
+max-height:120px;
+
+padding:8px;
+
+font-size:12px;
+
+line-height:1.5;
+
+}
+
+}
+
+@media(max-width:600px){
+
+.battle-player{
+
+font-size:11px;
+
+padding:4px 6px;
+
+margin:2px;
+
+}
+
+}
+
+/* =========================
+   Meaning Test 题目往下移动
+========================= */
+
+#testScreen{
+    padding-top:110px;
+    box-sizing:border-box;
+}
+
+/* =========================
+   MeaningTest 成绩页面配色
+========================= */
+
+/* 页面外围 */
+body.result-mode{
+    background:#fff7ed !important;
+}
+
+/* 成绩页面主体 */
+body.result-mode #testScreen{
+    background:#fff7ed !important;
+}
+
+/* 成绩卡片 */
+body.result-mode .result-card{
+    background:#fff7ed !important;
+}
+
+/* 顶部品牌 */
+body.result-mode .app-header{
+    background:#fff7ed !important;
+}
+
+/* 学生资料 */
+body.result-mode .info-section{
+    background:#fff7ed !important;
+}
+
+/* 成绩统计 */
+body.result-mode .result-stats{
+    background:#ffffff !important;
+}
+
+/* FAIL 区域 */
+body.result-mode .fail-box{
+    background:#ffd6d6 !important;
+}
+
+/* 不会读词汇 */
+body.result-mode .wrong-box{
+    background:#dceafa !important;
+}
+
+/* 返回按钮 */
+body.result-mode .back-btn{
+    display:block;
+    margin:20px auto 15px;
+}
+
+body.result-mode .app-header{
+    margin-bottom:0 !important;
+}
+
+body.result-mode .result-header-row{
+    margin-top:0 !important;
+}
+
+/* 成绩页面：彻底缩小标题与成绩资料之间的空白 */
+
+body.result-mode #word.card{
+    font-size:16px !important;
+    line-height:normal !important;
+
+    margin:0 !important;
+    padding:0 !important;
+
+    height:auto !important;
+    min-height:0 !important;
+
+    transform:none !important;
+}
+
+/* 标题本身不保留额外间距 */
+body.result-mode #word .app-header{
+    margin:0 !important;
+}
+
+
+body.result-mode #result{
+    margin-top:-50px !important;
+    padding-top:0 !important;
+    position:relative;
+    z-index:1;
+}
+
 </style>
 </head>
 
@@ -1003,8 +1244,7 @@ text-align:center;
     <h1>Meaning Test</h1>
 
     <select id="studentGrade" onchange="loadStudents()">
-        <option value="">请选择年级</option>
-        <option value="Year 5">Year 5</option>
+        <option value="Year 3">Year 3</option>
     </select>
 
     <br>
@@ -1082,7 +1322,11 @@ Meaning Test 测试画面
 
 <div id="testScreen" style="display:none;">
 
-    <div class="question" id="number"></div>
+<div id="battleRanking">
+🔥 Meaning Battle
+</div>
+
+<div class="question" id="number"></div>
 
     <div class="card" id="word">
         开始
@@ -1126,15 +1370,15 @@ Meaning Test 测试画面
         选择词汇范围
     </button>
 
-    <button class="back-btn" onclick="window.location.href='index.html'">
-返回
-</button>
-
     <div
-        class="result"
-        id="result"
-        style="display:none;"
-    ></div>
+    class="result"
+    id="result"
+    style="display:none;"
+></div>
+
+<button class="back-btn" onclick="leaveAndBack()">
+    返回
+</button>
 
 </div>
 
@@ -1150,7 +1394,8 @@ import {
     doc,
     getDoc,
     serverTimestamp,
-    getDocs
+    getDocs,
+    onSnapshot
 } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
 
 
@@ -1193,6 +1438,7 @@ window.doc = doc;
 window.getDoc = getDoc;
 window.getDocs = getDocs;
 window.serverTimestamp = serverTimestamp;
+window.onSnapshot = onSnapshot;
 
 window.firebaseReady = true;
 
@@ -1207,366 +1453,318 @@ window.firebaseReady = true;
 
 const bm = [
 
-    "lima",
-  "orang",
-  "dari",
-  "dahulu",
-  "empat",
-  "betul",
-  "akan",
-  "buka",
-  "baru",
-  "bawa",
-  "paling",
-  "lihat",
-  "berdiri",
-  "jawab",
-  "merah",
-  "hijau",
-  "boleh",
-  "oleh",
-  "baca",
-  "angin",
-  "kuboid",
-  "kon",
-  "silinder",
-  "kubus",
-  "prisma",
-  "piramid",
-  "segi empat sama",
-  "segi empat tepat",
-  "segi tiga",
-  "cakap",
-  "kepentingan",
-  "ada apa",
-  "daripada apa",
-  "pelan reka bentuk",
-  "sambungkan",
-  "kenapa",
-  "asas",
-  "bentuk",
-  "tiga dimensi",
+    "apa",
+  "perkataan",
   "murid",
-  "model",
-  "bangunan",
-  "sfera",
-  "berikut",
-  "objek",
-  "apa",
-  "aktiviti",
-  "buat",
-  "sebut",
-  "tarikh",
-  "latihan",
-  "bimbing",
-  "pelbagai",
-  "reka bentuk",
-  "ruang kosong",
-  "bulatan",
-  "nama",
-  "komponen",
-  "kemudian",
-  "tulis",
-  "lain",
-  "karya",
-  "ini",
-  "penambahbaikan",
-  "penting",
-  "bagaimana",
-  "lukis",
-  "ujian",
-  "senang",
-  "rajah di bawah",
-  "tunjuk",
-  "kehidupan",
-  "cari",
-  "rajah di atas",
-  "perisian",
-  "warna",
-  "pamerkan",
-  "arahan",
+  "teks",
+  "ayat",
+  "bacaan",
+  "kandungan",
+  "cikgu",
   "berdasarkan",
-  "guna",
-  "kad",
-  "perkenalkan",
-  "kongsi",
-  "ubah",
-  "benda",
-  "menjadi",
+  "unit",
+  "kemudian",
+  "betul",
+  "kami",
+  "ayah",
+  "baca",
   "satu",
-  "kuantiti",
-  "Xiao Ling",
-  "sama",
-  "contoh",
-  "sediakan",
-  "garis putus-putus",
-  "cetak",
-  "gambar",
-  "origami",
-  "galakkan",
-  "cara",
-  "imej",
-  "kumpul",
-  "kembangkan",
-  "mesin",
-  "berubah bentuk",
-  "telah guna",
-  "bayangkan",
-  "rumah",
-  "di dalam",
-  "keadaan",
-  "aplikasi",
+  "soalan",
+  "berikut",
+  "cakap",
+  "jawab",
+  "standard",
+  "huruf Cina",
+  "kehidupan",
+  "harimau",
+  "bahan pengajaran",
+  "tulis",
+  "boleh",
+  "makna",
+  "burung",
+  "saya punya",
+  "mereka",
+  "pelangi",
+  "fikir",
+  "getah",
   "isi",
-  "huruf",
-  "tiup hingga tumbang",
-  "tidak akan",
-  "gambarkan",
-  "yang digunakan",
-  "sejenis"
+  "tempat",
+  "menyatakan",
+  "faham",
+  "diri sendiri",
+  "bangun",
+  "cerita",
+  "cetak",
+  "membimbing",
+  "jawapan",
+  "guru",
+  "belajar",
+  "kenal",
+  "rakan sekelas",
+  "bayangkan",
+  "yang mana",
+  "kemahiran",
+  "kesepuluh",
+  "anak kucing",
+  "cara",
+  "bot kertas",
+  "buluh",
+  "suka",
+  "penjelasan",
+  "perasaan",
+  "sebutan",
+  "perkataan baharu",
+  "ibu",
+  "tiada",
+  "perkara",
+  "mengenal huruf",
+  "haiwan",
+  "perenggan",
+  "buku teks",
+  "adik lelaki",
+  "kawan",
+  "aktiviti",
+  "negara kita",
+  "bulatkan",
+  "ini",
+  "kaitkan",
+  "bagaimana",
+  "ciri",
+  "bagaimana",
+  "masa",
+  "terus lari",
+  "bangunan tinggi",
+  "berkumpulan",
+  "menutup telinga mencuri loceng",
+  "lautan luas",
+  "pemandangan tasik dan gunung",
+  "berbeza daripada yang lain",
+  "berwarna-warni",
+  "bercita-cita tinggi",
+  "dirompak habis",
+  "seronok sendiri",
+  "tahu berterima kasih",
+  "lazat hingga ke bibir",
+  "empat penjuru",
+  "jasa tidak dapat dilupakan",
+  "tinggi dan rendah",
+  "dahan lebat daun",
+  "bata merah atap hijau",
+  "kelaparan dan kesejukan",
+  "satu langkah pantas",
+  "rajin dan tabah"
 
 ];
 
 
 const zh = [
 
-    "五",
-  "人",
-  "从",
-  "先",
-  "四",
-  "对",
-  "将",
-  "开",
-  "才",
-  "把",
-  "最",
-  "看",
-  "站",
-  "答",
-  "红",
-  "绿",
-  "能",
-  "被",
-  "读",
-  "风",
-  "长方体",
-  "圆锥体",
-  "圆柱体",
-  "正方体",
-  "棱柱体",
-  "棱锥体",
-  "正方形",
-  "长方形",
-  "三角形",
-  "说一说",
-  "重要性",
-  "有什么",
-  "由什么",
-  "设计图",
-  "连一连",
-  "为什么",
-  "基本",
-  "形状",
-  "立体",
+    "什么",
+  "词语",
   "学生",
-  "模型",
-  "建筑",
-  "球体",
-  "以下",
-  "物体",
-  "什么",
-  "活动",
-  "制作",
-  "说出",
-  "日期",
-  "练习",
-  "引导",
-  "各种",
-  "设计",
-  "空格",
-  "圆形",
-  "名称",
-  "组成",
-  "然后",
-  "写出",
-  "其他",
-  "作品",
-  "这些",
-  "改进",
-  "重要",
-  "怎样",
-  "画出",
-  "测试",
-  "容易",
-  "下图",
-  "显示",
-  "生活",
-  "找出",
-  "上图",
-  "软件",
-  "颜色",
-  "展示",
-  "指示",
+  "课文",
+  "句子",
+  "阅读",
+  "内容",
+  "老师",
   "根据",
-  "使用",
-  "卡片",
-  "介绍",
-  "分享",
-  "改变",
-  "东西",
-  "变成",
+  "单元",
+  "然后",
+  "正确",
+  "我们",
+  "爸爸",
+  "读读",
   "一个",
-  "数量",
-  "小玲",
-  "相同",
-  "例子",
-  "准备",
-  "虚线",
-  "打印",
-  "图画",
-  "折纸",
-  "鼓励",
-  "方法",
-  "图片",
-  "收集",
-  "发挥",
-  "机器",
-  "变形",
-  "用了",
-  "想象",
-  "房子",
-  "里的",
-  "情况",
-  "应用",
+  "问题",
+  "以下",
+  "说说",
+  "回答",
+  "标准",
+  "汉字",
+  "生活",
+  "老虎",
+  "教材",
+  "写出",
+  "可以",
+  "意思",
+  "鸟儿",
+  "我的",
+  "他们",
+  "彩虹",
+  "想想",
+  "橡胶",
   "填写",
-  "字母",
-  "吹倒",
-  "不会",
-  "描绘",
-  "用的",
-  "一种"
+  "地方",
+  "表达",
+  "理解",
+  "自己",
+  "起来",
+  "故事",
+  "打印",
+  "引导",
+  "答案",
+  "教师",
+  "学习",
+  "认识",
+  "同学",
+  "想象",
+  "哪些",
+  "技能",
+  "第十",
+  "小猫",
+  "方法",
+  "纸船",
+  "竹筒",
+  "喜欢",
+  "说明",
+  "感受",
+  "读音",
+  "生字",
+  "妈妈",
+  "没有",
+  "事情",
+  "识字",
+  "动物",
+  "段落",
+  "课本",
+  "弟弟",
+  "朋友",
+  "活动",
+  "我国",
+  "圈出",
+  "这个",
+  "联想",
+  "如何",
+  "特点",
+  "怎样",
+  "时候",
+  "拔腿就跑",
+  "高楼大厦",
+  "成群结队",
+  "掩耳盗铃",
+  "汪洋大海",
+  "湖光山色",
+  "与众不同",
+  "五颜六色",
+  "胸怀大志",
+  "洗劫一空",
+  "自得其乐",
+  "知恩图报",
+  "唇齿留香",
+  "四面八方",
+  "功不可没",
+  "高高矮矮",
+  "枝繁叶茂",
+  "红砖绿瓦",
+  "挨饥受冻",
+  "一个箭步",
+  "刻苦耐劳"
 
 ];
 
 
 const en = [
 
-    "five",
-  "person",
-  "from",
-  "first",
-  "four",
-  "correct",
-  "will",
-  "open",
-  "only then",
-  "hold",
-  "most",
-  "look",
-  "stand",
-  "answer",
-  "red",
-  "green",
-  "can",
-  "by",
-  "read",
-  "wind",
-  "cuboid",
-  "cone",
-  "cylinder",
-  "cube",
-  "prism",
-  "pyramid",
-  "square",
-  "rectangle",
-  "triangle",
-  "say it",
-  "importance",
-  "what is there",
-  "made of what",
-  "design plan",
-  "connect",
-  "why",
-  "basic",
-  "shape",
-  "three-dimensional",
+    "what",
+  "word",
   "student",
-  "model",
-  "building",
-  "sphere",
-  "the following",
-  "object",
-  "what",
-  "activity",
-  "make",
-  "say out",
-  "date",
-  "practice",
-  "guide",
-  "various",
-  "design",
-  "blank space",
-  "circle",
-  "name",
-  "component",
-  "then",
-  "write out",
-  "other",
-  "artwork",
-  "these",
-  "improvement",
-  "important",
-  "how",
-  "draw out",
-  "test",
-  "easy",
-  "picture below",
-  "show",
-  "life",
-  "find out",
-  "picture above",
-  "software",
-  "colour",
-  "display",
-  "instruction",
+  "text",
+  "sentence",
+  "reading",
+  "content",
+  "teacher",
   "based on",
-  "use",
-  "card",
-  "introduce",
-  "share",
-  "change",
-  "thing",
-  "become",
+  "unit",
+  "then",
+  "correct",
+  "we",
+  "father",
+  "read",
   "one",
-  "quantity",
-  "Xiao Ling",
-  "same",
-  "example",
-  "prepare",
-  "dotted line",
-  "print",
-  "picture",
-  "origami",
-  "encourage",
-  "method",
-  "image",
-  "collect",
-  "develop",
-  "machine",
-  "transform",
-  "used",
-  "imagine",
-  "house",
-  "inside",
-  "situation",
-  "application",
+  "question",
+  "the following",
+  "say",
+  "answer",
+  "standard",
+  "Chinese character",
+  "life",
+  "tiger",
+  "teaching material",
+  "write out",
+  "can",
+  "meaning",
+  "bird",
+  "my",
+  "they",
+  "rainbow",
+  "think",
+  "rubber",
   "fill in",
-  "letter",
-  "blow down",
-  "will not",
-  "depict",
-  "used for",
-  "a type of"
+  "place",
+  "express",
+  "understand",
+  "oneself",
+  "get up",
+  "story",
+  "print",
+  "guide",
+  "answer",
+  "teacher",
+  "study",
+  "know",
+  "classmate",
+  "imagine",
+  "which",
+  "skill",
+  "tenth",
+  "kitten",
+  "method",
+  "paper boat",
+  "bamboo tube",
+  "like",
+  "explanation",
+  "feeling",
+  "pronunciation",
+  "new word",
+  "mother",
+  "do not have",
+  "matter",
+  "recognise words",
+  "animal",
+  "paragraph",
+  "textbook",
+  "younger brother",
+  "friend",
+  "activity",
+  "our country",
+  "circle out",
+  "this",
+  "associate",
+  "how",
+  "feature",
+  "how",
+  "time",
+  "run away at once",
+  "tall buildings",
+  "in groups",
+  "cover ears and steal a bell",
+  "vast ocean",
+  "lake and mountain scenery",
+  "different from others",
+  "colourful",
+  "have great ambition",
+  "robbed completely",
+  "enjoy oneself",
+  "repay kindness",
+  "lingering fragrance",
+  "all directions",
+  "credit cannot be erased",
+  "tall and short",
+  "thick branches and lush leaves",
+  "red bricks and green tiles",
+  "suffer hunger and cold",
+  "one quick step",
+  "hardworking and enduring"
 
 ];
 
@@ -1577,10 +1775,8 @@ en.map((item,index)=>{
     return {
 
         bm:bm[index],
-
-        zh:zh[index],
-
-        en:item
+        en:en[index],
+        zh:zh[index]
 
     };
 
@@ -1589,16 +1785,14 @@ en.map((item,index)=>{
 
 const students = {
 
-    "Year 5":[
-        "Jovana",
-        "Anson",
-        "Althea",
-	"Muqri",
-	"Richie",
-	"Corey",
-	"Keefe",
-"Quenice"
-    ]
+    "Year 3":[
+"Gracelyn",
+        "Eyrina",
+        "Averlyn",
+	"Adrieal",
+	"Ryan Chin",
+	"Renee"
+]
 
 };
 
@@ -1628,6 +1822,8 @@ let finished = false;
 
 let testMode = "normal";
 
+let battleActive = false;
+
 
 /* ==================================================
    学生资料
@@ -1641,7 +1837,7 @@ let currentStudentName = "";
 let currentStudentGrade = "";
 
 let currentTestName =
-"BC_P5_Meaning_Set 1";
+"BC_P3_Meaning_Set 1";
 
 function getTestID(){
 
@@ -1713,20 +1909,410 @@ async function startStudentSession(){
     grade;
 
 
+    // =========================
+    // 开始 Meaning Battle
+    // =========================
+
+    battleActive = true;
+
+    await startBattle();
+
+
+    // 隐藏登录画面
+
     document.getElementById(
         "loginScreen"
     ).style.display="none";
 
+
+    // 显示测试画面
 
     document.getElementById(
         "testScreen"
     ).style.display="block";
 
 
+    // 显示 Battle Ranking
+
+    document.getElementById(
+        "battleRanking"
+    ).style.display="block";
+
+
+    // 开始监听其他学生
+
+    watchBattle();
+
+
+    // 检查之前保存的进度
+
     await loadProgress();
 
 }
 
+// ==================================================
+// Meaning Test Live Battle
+// ==================================================
+
+function watchBattle(){
+
+    let battlePlayers = {};
+
+
+    function renderBattle(){
+
+        const now = Date.now();
+
+
+        let players =
+            Object.values(battlePlayers)
+            .filter(player => {
+
+                // 不是测试中的学生
+                if(player.status !== "playing"){
+                    return false;
+                }
+
+
+                // 没有心跳资料
+                if(!player.lastActive){
+                    return false;
+                }
+
+
+                // 超过 10 秒没有心跳
+                if(
+                    now - player.lastActive
+                    > 10000
+                ){
+                    return false;
+                }
+
+
+                return true;
+
+            });
+
+
+        // 正确率高的排前面
+
+        players.sort(
+            (a,b) =>
+            b.accuracy - a.accuracy
+        );
+
+
+        let html = "";
+
+
+        players.forEach(
+            (player,index)=>{
+
+                let medal = "";
+
+
+                if(index === 0){
+                    medal = "🥇";
+                }
+                else if(index === 1){
+                    medal = "🥈";
+                }
+                else if(index === 2){
+                    medal = "🥉";
+                }
+
+
+                html += `
+
+                <span class="battle-player">
+
+                    ${medal}
+                    ${player.studentName}
+                    ${player.accuracy}%
+
+                </span>
+
+                `;
+
+            }
+        );
+
+
+        document.getElementById(
+            "battleRanking"
+        ).innerHTML = html;
+
+    }
+
+
+    // =========================
+    // Firebase 实时监听
+    // =========================
+
+    window.onSnapshot(
+
+        window.collection(
+            window.db,
+            "meaningLiveBattle"
+        ),
+
+        (snapshot)=>{
+
+            snapshot.forEach((doc)=>{
+
+                const data = doc.data();
+
+                battlePlayers[doc.id] = data;
+
+            });
+
+
+            renderBattle();
+
+        }
+
+    );
+
+
+    // =========================
+    // 每 1 秒检查在线状态
+    // =========================
+
+    clearInterval(
+        window.battleDisplayTimer
+    );
+
+
+    window.battleDisplayTimer =
+        setInterval(()=>{
+
+            renderBattle();
+
+        },10000);
+
+}
+
+
+async function startBattle(){
+
+    await window.setDoc(
+
+        window.doc(
+            window.db,
+            "meaningLiveBattle",
+            currentStudentName
+        ),
+
+        {
+
+            studentName:
+            currentStudentName,
+
+            correct:0,
+
+            wrong:0,
+
+            accuracy:0,
+
+            status:"playing",
+
+            lastActive:Date.now()
+
+        }
+
+    );
+
+
+    // =========================
+    // Meaning Test 在线心跳
+    // =========================
+
+    clearInterval(
+        window.battleHeartbeat
+    );
+
+
+    window.battleHeartbeat =
+        setInterval(async ()=>{
+
+            if(!currentStudentName || !battleActive){
+    return;
+}
+
+
+            try{
+
+                await window.setDoc(
+
+                    window.doc(
+                        window.db,
+                        "meaningLiveBattle",
+                        currentStudentName
+                    ),
+
+                    {
+
+                        status:"playing",
+
+                        lastActive:Date.now()
+
+                    },
+
+                    {
+                        merge:true
+                    }
+
+                );
+
+            }
+            catch(error){
+
+                console.log(
+                    "Battle heartbeat failed:",
+                    error
+                );
+
+            }
+
+        },10000);
+
+}
+
+
+async function updateBattleFirebase(){
+
+    if(!currentStudentName || !battleActive){
+        return;
+    }
+
+    let total =
+    correct + wrong;
+
+
+    let accuracy =
+    total === 0
+    ?
+    0
+    :
+    Math.round(
+        (correct / total) * 100
+    );
+
+
+    await window.setDoc(
+
+        window.doc(
+            window.db,
+            "meaningLiveBattle",
+            currentStudentName
+        ),
+
+        {
+
+            studentName:
+            currentStudentName,
+
+            correct,
+
+            wrong,
+
+            accuracy,
+
+            status:"playing",
+
+            lastActive:Date.now()
+
+        }
+
+    );
+
+}
+
+
+// ==================================================
+// 离开 Meaning Test
+// ==================================================
+
+async function leaveBattle(){
+
+    battleActive = false;
+
+    if(!currentStudentName){
+        return;
+    }
+
+
+    // 停止在线心跳
+
+    clearInterval(
+        window.battleHeartbeat
+    );
+
+
+    try{
+
+        await window.setDoc(
+
+            window.doc(
+                window.db,
+                "meaningLiveBattle",
+                currentStudentName
+            ),
+
+            {
+
+                status:"finished",
+
+                lastActive:Date.now()
+
+            },
+
+            {
+                merge:true
+            }
+
+        );
+
+    }
+    catch(error){
+
+        console.log(
+            "Leave Battle failed:",
+            error
+        );
+
+    }
+
+}
+
+async function leaveAndBack(){
+
+    await leaveBattle();
+
+    window.location.href = "../index.html";
+
+}
+
+// ==================================================
+// 页面离开检测
+// ==================================================
+
+document.addEventListener(
+    "visibilitychange",
+    ()=>{
+    
+        if(
+            document.visibilityState === "hidden"
+        ){
+    
+            console.log(
+                "页面进入 hidden"
+            );
+    
+        }
+    
+    }
+);
 
 /* ==================================================
    读取 Meaning Test 之前的进度
@@ -1882,7 +2468,6 @@ else{
 
 }
 
-
 /* ==================================================
    自动生成选择题
    ======= 保持你提供的核心逻辑 =======
@@ -1909,9 +2494,9 @@ function createQuestions(sourceWords){
 
         return {
 
-            word:item.en,
+            word:item.zh,
 
-            answer:item.zh,
+            answer:item.en,
 
             options:options
 
@@ -2002,7 +2587,7 @@ function showQuestion(){
 
 
         btn.innerHTML = `
-            <div>${option.zh}</div>
+            <div>${option.en}</div>
             <small>${option.bm}</small>
         `;
 
@@ -2011,7 +2596,7 @@ function showQuestion(){
         function(){
 
             checkAnswer(
-                option.zh,
+                option.en,
                 btn
             );
 
@@ -2036,7 +2621,7 @@ function showQuestion(){
    ======= 保持你提供的核心逻辑 =======
    ================================================== */
 
-function checkAnswer(
+async function checkAnswer(
     answer,
     clickedBtn
 ){
@@ -2070,12 +2655,13 @@ function checkAnswer(
 
     if(answer === q.answer){
 
-        correct++;
+    correct++;
 
+    await updateBattleFirebase();
 
-        clickedBtn.classList.add(
-            "correct"
-        );
+    clickedBtn.classList.add(
+        "correct"
+    );
 
 
         document.body.style.background =
@@ -2097,12 +2683,13 @@ function checkAnswer(
     }
     else{
 
-        wrong++;
+    wrong++;
 
+    await updateBattleFirebase();
 
-        wrongWords.push(
-            q.word
-        );
+    wrongWords.push(
+        q.word
+    );
 
 
         clickedBtn.classList.add(
@@ -2603,71 +3190,48 @@ else{
    选择词汇范围
    ================================================== */
 
+
 function selectRange(){
 
-    const start =
-    prompt(
-        "请输入开始词汇"
-    );
+    let start = prompt("请输入开始词汇或序号");
 
+    // 点击 Cancel 时，不进行任何操作
+    if(start === null) return;
 
-    if(start === null){
+    let end = prompt("请输入结束词汇或序号");
 
-        return;
+    // 点击 Cancel 时，不进行任何操作
+    if(end === null) return;
 
-    }
+    start = start.trim();
+    end = end.trim();
 
+    // 支持输入词汇，也支持输入序号（从 1 开始）
+    let startIndex = /^\d+$/.test(start)
+        ? Number(start) - 1
+        : originalWords.indexOf(start);
 
-    const end =
-    prompt(
-        "请输入结束词汇"
-    );
+    let endIndex = /^\d+$/.test(end)
+        ? Number(end) - 1
+        : originalWords.indexOf(end);
 
-
-    if(end === null){
-
-        return;
-
-    }
-
-
-    const startIndex =
-    originalWords.findIndex(
-        x =>
-        x.en.toLowerCase() ===
-        start.trim().toLowerCase()
-    );
-
-
-    const endIndex =
-    originalWords.findIndex(
-        x =>
-        x.en.toLowerCase() ===
-        end.trim().toLowerCase()
-    );
-
-
+    // 检查输入是否有效
     if(
-        startIndex === -1 ||
-        endIndex === -1 ||
+        startIndex < 0 ||
+        endIndex < 0 ||
+        startIndex >= originalWords.length ||
+        endIndex >= originalWords.length ||
         startIndex > endIndex
     ){
-
-        alert(
-            "词汇不存在，或范围不正确"
-        );
-
+        alert("词汇或序号无效，请重新输入");
         return;
-
     }
 
-
-    meaningRange =
-    originalWords.slice(
+    // 防止刷新导致进度消失
+    selectedRange = originalWords.slice(
         startIndex,
         endIndex + 1
     );
-
 
     restart();
 
@@ -2991,7 +3555,8 @@ async function loadDashboard(){
 
     try{
 
-        const snapshot =
+        // 读取 Meaning Test 进度
+        const progressSnapshot =
         await window.getDocs(
 
             window.collection(
@@ -3002,6 +3567,112 @@ async function loadDashboard(){
         );
 
 
+        // 读取 Meaning Test 成绩
+        const resultSnapshot =
+        await window.getDocs(
+
+            window.collection(
+                window.db,
+                "meaningResults"
+            )
+
+        );
+
+
+        // 只读取当前 TestName 的成绩
+let resultMap = {};
+
+resultSnapshot.forEach((doc)=>{
+  const data = doc.data();
+
+  if(data.testName === currentTestName){
+    resultMap[data.studentName] = data;
+  }
+});
+
+
+        // 合并资料
+        let students = [];
+
+
+        progressSnapshot.forEach(
+            (docSnap)=>{
+
+                
+const data =
+    docSnap.data();
+
+// 只显示当前 TestName 的学生
+if(data.testName !== currentTestName){
+    return;
+}
+
+const result =
+    resultMap[data.studentName] || {};
+
+
+
+                students.push({
+
+                    id:
+                    docSnap.id,
+
+                    studentName:
+                    data.studentName,
+
+                    current:
+                    data.current || 0,
+
+                    totalWords:
+                    data.totalWords || 0,
+
+                    accuracy:
+                    result.accuracy || 0,
+
+                    updatedAt:
+                    data.updatedAt
+
+                });
+
+            }
+        );
+
+
+        // =========================
+// 排序
+// 第一：完成进度比例
+// 第二：准确率
+// =========================
+
+students.sort((a,b)=>{
+
+    const progressA =
+        a.totalWords > 0
+        ? a.current / a.totalWords
+        : 0;
+
+    const progressB =
+        b.totalWords > 0
+        ? b.current / b.totalWords
+        : 0;
+
+    // 第一优先：完成进度高的排前面
+    if(progressB !== progressA){
+
+        return progressB - progressA;
+
+    }
+
+    // 第二优先：准确率高的排前面
+    return b.accuracy - a.accuracy;
+
+});
+
+
+        // =========================
+        // 建立表格
+        // =========================
+
         let html = `
 
             <table class="result-table">
@@ -3010,11 +3681,9 @@ async function loadDashboard(){
 
                     <th>学生</th>
 
-                    <th>年级</th>
-
                     <th>进度</th>
 
-                    <th>状态</th>
+                    <th>准确率</th>
 
                     <th>保存时间</th>
 
@@ -3025,28 +3694,20 @@ async function loadDashboard(){
         `;
 
 
-        snapshot.forEach(
-            (docSnap)=>{
-
-                const data =
-                docSnap.data();
+        students.forEach(
+            (data)=>{
 
 
                 let progress =
-                (data.current || 0) +
-                "/" +
-                (data.totalWords || 0);
+                data.current
+                +
+                "/"
+                +
+                data.totalWords;
 
 
-                let status =
-                (
-                    data.current >=
-                    data.totalWords
-                )
-                ?
-                "已完成"
-                :
-                "学习中";
+                let accuracy =
+                data.accuracy;
 
 
                 html += `
@@ -3057,25 +3718,22 @@ async function loadDashboard(){
                             ${data.studentName || "-"}
                         </td>
 
-                        <td>
-                            ${data.grade || "-"}
-                        </td>
 
                         <td>
                             ${progress}
                         </td>
 
+
                         <td
                             class="${
-                                status === "已完成"
-                                ?
-                                "pass"
-                                :
-                                ""
+                                accuracy >= 80
+                                ? "pass"
+                                : "fail"
                             }"
                         >
-                            ${status}
+                            ${accuracy}%
                         </td>
+
 
                         <td>
 
@@ -3085,7 +3743,11 @@ async function loadDashboard(){
                                 data.updatedAt
                                 .toDate()
                                 .toLocaleDateString(
-                                    "en-GB"
+                                    "en-GB",
+                                    {
+                                        day:"2-digit",
+                                        month:"2-digit"
+                                    }
                                 )
                                 +
                                 "<br>"
@@ -3105,11 +3767,12 @@ async function loadDashboard(){
 
                         </td>
 
+
                         <td>
 
                             <button
                                 class="detail-btn"
-                                onclick="openDetail('${docSnap.id}')"
+                                onclick="openDetail('${data.id}')"
                             >
                                 📖
                             </button>
@@ -3151,7 +3814,6 @@ async function loadDashboard(){
     }
 
 }
-
 
 /* ==================================================
    重新开始确认
