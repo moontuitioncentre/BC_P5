@@ -1248,8 +1248,7 @@ body.result-mode #result{
         <option value="Year 3">Year 3</option>
     </select>
 
-
-<br>
+    <br>
 
     <select id="studentName">
         <option value="">请选择学生</option>
@@ -1787,7 +1786,7 @@ en.map((item,index)=>{
 
 const students = {
 
-    "Year 3":[
+"Year 3":[
 "Gracelyn",
         "Eyrina",
         "Averlyn",
@@ -1839,7 +1838,7 @@ let currentStudentName = "";
 let currentStudentGrade = "";
 
 let currentTestName =
-"BC_P3_Meaning_Set 1";
+"BC_P1_Meaning_Set 1";
 
 function getTestID(){
 
@@ -3192,48 +3191,71 @@ else{
    选择词汇范围
    ================================================== */
 
-
 function selectRange(){
 
-    let start = prompt("请输入开始词汇或序号");
+    const start =
+    prompt(
+        "请输入开始词汇"
+    );
 
-    // 点击 Cancel 时，不进行任何操作
-    if(start === null) return;
 
-    let end = prompt("请输入结束词汇或序号");
+    if(start === null){
 
-    // 点击 Cancel 时，不进行任何操作
-    if(end === null) return;
-
-    start = start.trim();
-    end = end.trim();
-
-    // 支持输入词汇，也支持输入序号（从 1 开始）
-    let startIndex = /^\d+$/.test(start)
-        ? Number(start) - 1
-        : originalWords.indexOf(start);
-
-    let endIndex = /^\d+$/.test(end)
-        ? Number(end) - 1
-        : originalWords.indexOf(end);
-
-    // 检查输入是否有效
-    if(
-        startIndex < 0 ||
-        endIndex < 0 ||
-        startIndex >= originalWords.length ||
-        endIndex >= originalWords.length ||
-        startIndex > endIndex
-    ){
-        alert("词汇或序号无效，请重新输入");
         return;
+
     }
 
-    // 防止刷新导致进度消失
-    selectedRange = originalWords.slice(
+
+    const end =
+    prompt(
+        "请输入结束词汇"
+    );
+
+
+    if(end === null){
+
+        return;
+
+    }
+
+
+    const startIndex =
+    originalWords.findIndex(
+        x =>
+        x.en.toLowerCase() ===
+        start.trim().toLowerCase()
+    );
+
+
+    const endIndex =
+    originalWords.findIndex(
+        x =>
+        x.en.toLowerCase() ===
+        end.trim().toLowerCase()
+    );
+
+
+    if(
+        startIndex === -1 ||
+        endIndex === -1 ||
+        startIndex > endIndex
+    ){
+
+        alert(
+            "词汇不存在，或范围不正确"
+        );
+
+        return;
+
+    }
+
+
+    meaningRange =
+    originalWords.slice(
         startIndex,
         endIndex + 1
     );
+
 
     restart();
 
@@ -3834,14 +3856,30 @@ function confirmRestart(){
 
         restart();
 
-    }
+}
 
 }
 
+// =======================
+// Refresh保护
+// =======================
 
-/* ==================================================
-   学生名单
-   ================================================== */
+let pageLoaded = true;
+
+
+window.addEventListener(
+"beforeunload",
+function(e){
+
+if(pageLoaded){
+
+e.preventDefault();
+
+e.returnValue="";
+
+}
+
+});
 
 function loadStudents(){
 
