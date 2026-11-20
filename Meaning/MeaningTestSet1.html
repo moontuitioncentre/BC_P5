@@ -2657,14 +2657,9 @@ async function loadProgress(){
 
     try{
 
-        const studentID =
-currentStudentName +
-"_" +
-currentStudentGrade +
-"_" +
-SUBJECT +
-"_" +
-TEST_TYPE;
+
+const testID = getTestID();
+
 
 
         /*
@@ -3704,14 +3699,9 @@ async function saveProgress(){
 
     try{
 
-        const studentID =
-currentStudentName +
-"_" +
-currentStudentGrade +
-"_" +
-SUBJECT +
-"_" +
-TEST_TYPE;
+
+const testID = getTestID();
+
 
 
         await window.setDoc(
