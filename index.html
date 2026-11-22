@@ -1,0 +1,2502 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8" />
+  <title>听写练习（华文优先）</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      font-family: "Noto Sans SC", sans-serif;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      height: 100vh; background-color: #f0f0f0;
+    }
+    .container {
+      text-align: center; padding: 20px; background: #fff; border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,.1); max-width: 720px; width: 92%;
+    }
+    .question { font-size: 28px; margin-bottom: 10px; }
+    .word { font-size: 34px; margin-bottom: 16px; }
+    .btns {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+  margin-bottom: 14px;
+}
+
+.btn-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.search-box input {
+  font-size: 18px;
+  padding: 8px 12px;
+  width: 180px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.btn.search-btn {
+  background-color: #008cff;
+}
+
+.pinyin {
+  font-size: 18px;
+  color: #555;
+  margin-top: -5px;
+  margin-bottom: 25px;
+  font-style: italic;
+}
+
+    .btn {
+      font-size: 18px; padding: 10px 20px; border: none; border-radius: 8px;
+      background-color: #dc3545; color: #fff; cursor: pointer;
+    }
+    .btn.secondary { background-color: #6c757d; }
+    .btn.info { background-color: #dc3545; }
+    .btn.success { background-color: #dc3545; }
+    .btn.warning { background-color: #ffc107; color: #000; }
+    .meaning {
+      margin-top: 10px; font-size: 20px; background: #f8f9fa; border-radius: 8px;
+      padding: 12px; min-height: 60px; line-height: 1.6; white-space: pre-wrap;
+    }
+
+.test-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.test-btn {
+  font-size: 18px;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+.reading-btn {
+  background-color: #007bff;
+}
+
+.meaning-btn {
+  background-color: #28a745;
+}
+
+.test-btn:hover {
+  opacity: 0.85;
+}
+
+.set-selector {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 18px;
+}
+
+.set-selector select {
+  font-size: 18px;
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: white;
+}
+
+/* 真正含义按钮 - 紫色 */
+.btn.purple {
+  background-color: #8e44ad;
+  color: white;
+}
+
+.btn.purple:hover {
+  background-color: #732d91;
+}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="container">
+
+    <!-- 新增：Set 选择菜单 -->
+    <div class="set-selector">
+      <label for="setSelect">选择词汇 Set：</label>
+      <select id="setSelect" onchange="changeSet()">
+        <option value="Set 1">Set 1</option>
+        <option value="Set 2">Set 2</option>
+        <option value="Set 3">Set 3</option>
+      </select>
+    </div>
+
+    <div class="search-box">
+  <input 
+    type="text" 
+    id="searchInput" 
+    placeholder=""
+  >
+
+  <button 
+    class="btn search-btn" 
+    onclick="searchWord()">
+    Search
+  </button>
+</div>
+    <div class="question" id="question">题目 1</div>
+    <div class="word" id="word">—</div>
+    
+    <div class="btns">
+      <!-- 华文优先 -->
+       <div class="btn-row">
+      <button class="btn" onclick="playChineseWord()">朗读</button>
+      <button class="btn success" onclick="showEnglish()">English</button>
+      <button class="btn info" onclick="showMalay()">BM</button>
+      </div>
+
+      <div class="btn-row">
+  <button class="btn purple" onclick="showTrueChinese()">含义</button>      
+  <button class="btn purple" onclick="showTrueEnglish()">Meaning</button>      
+  <button class="btn purple" onclick="showTrueMalay()">Makna</button>  
+</div>
+
+      <div class="btn-row">
+      <button class="btn warning" onclick="showChineseSentence()">造句</button>
+      <button class="btn warning" onclick="showEnglishSentence()">Sentence</button>
+      <button class="btn warning" onclick="showMalaySentence()">Bina Ayat</button>
+      </div>
+
+      <div class="btn-row">
+      <button class="btn secondary" onclick="prevWord()">上一题</button>
+      <button class="btn secondary" onclick="nextWord()">下一题</button>
+      </div>
+
+    <div class="meaning" id="meaning"></div>
+
+    <div class="test-buttons">
+  <button class="test-btn reading-btn" onclick="goToReadingTest()">
+    测试阅读
+  </button>
+
+  <button class="test-btn meaning-btn" onclick="goToMeaningTest()">
+    测试意思
+  </button>
+</div>
+
+  </div>
+
+  <script>
+    // ====== 词库 ======
+    const zh = [
+      "什么",
+  "句子",
+  "上面",
+  "华文",
+  "日期",
+  "一个",
+  "阅读",
+  "我们",
+  "没有",
+  "问题",
+  "哪个",
+  "自己",
+  "他们",
+  "然后",
+  "回答",
+  "词语",
+  "文字",
+  "下面",
+  "意思",
+  "可以",
+  "相同",
+  "正确",
+  "根据",
+  "读音",
+  "妈妈",
+  "百姓",
+  "认为",
+  "知道",
+  "孩子",
+  "起来",
+  "生活",
+  "作者",
+  "为了",
+  "成语",
+  "课文",
+  "说明",
+  "这个",
+  "大家",
+  "因为",
+  "国家",
+  "人们",
+  "学习",
+  "画线",
+  "这样",
+  "时候",
+  "老师",
+  "感到",
+  "如何",
+  "曹操",
+  "赵国",
+  "怎么",
+  "华佗",
+  "时间",
+  "决定",
+  "字数",
+  "太空",
+  "大臣",
+  "不是",
+  "已经",
+  "屈原",
+  "世界",
+  "朋友",
+  "如果",
+  "许多",
+  "不少",
+  "代替",
+  "一天",
+  "一次",
+  "士兵",
+  "这些",
+  "测验",
+  "开始",
+  "虽然",
+  "同学",
+  "于是",
+  "怎样",
+  "公园",
+  "楚国",
+  "原因",
+  "项羽",
+  "线上",
+  "老鼠",
+  "个人",
+  "括号",
+  "看到",
+  "少于",
+  "非常",
+  "手法",
+  "练习",
+  "觉得",
+  "垂头丧气",
+  "诗情画意",
+  "无济于事",
+  "无影无踪",
+  "打抱不平",
+  "风驰电掣",
+  "大吃一惊",
+  "哈哈大笑",
+  "想方设法",
+  "滔滔不绝"
+    ];
+
+    const py = [
+  "shén me",
+  "jù zi",
+  "shàng miàn",
+  "huá wén",
+  "rì qī",
+  "yī gè",
+  "yuè dú",
+  "wǒ men",
+  "méi yǒu",
+  "wèn tí",
+  "nǎ gè",
+  "zì jǐ",
+  "tā men",
+  "rán hòu",
+  "huí dá",
+  "cí yǔ",
+  "wén zì",
+  "xià miàn",
+  "yì si",
+  "kě yǐ",
+  "xiāng tóng",
+  "zhèng què",
+  "gēn jù",
+  "dú yīn",
+  "mā ma",
+  "bǎi xìng",
+  "rèn wéi",
+  "zhī dào",
+  "hái zi",
+  "qǐ lái",
+  "shēng huó",
+  "zuò zhě",
+  "wèi le",
+  "chéng yǔ",
+  "kè wén",
+  "shuō míng",
+  "zhè gè",
+  "dà jiā",
+  "yīn wèi",
+  "guó jiā",
+  "rén men",
+  "xué xí",
+  "huà xiàn",
+  "zhè yàng",
+  "shí hou",
+  "lǎo shī",
+  "gǎn dào",
+  "rú hé",
+  "cáo cāo",
+  "zhào guó",
+  "zěn me",
+  "huà tuó",
+  "shí jiān",
+  "jué dìng",
+  "zì shù",
+  "tài kōng",
+  "dà chén",
+  "bù shì",
+  "yǐ jīng",
+  "qū yuán",
+  "shì jiè",
+  "péng you",
+  "rú guǒ",
+  "xǔ duō",
+  "bù shǎo",
+  "dài tì",
+  "yī tiān",
+  "yī cì",
+  "shì bīng",
+  "zhè xiē",
+  "cè yàn",
+  "kāi shǐ",
+  "suī rán",
+  "tóng xué",
+  "yú shì",
+  "zěn yàng",
+  "gōng yuán",
+  "chǔ guó",
+  "yuán yīn",
+  "xiàng yǔ",
+  "xiàn shàng",
+  "lǎo shǔ",
+  "gè rén",
+  "kuò hào",
+  "kàn dào",
+  "shǎo yú",
+  "fēi cháng",
+  "shǒu fǎ",
+  "liàn xí",
+  "jué de",
+  "chuí tóu sàng qì",
+  "shī qíng huà yì",
+  "wú jì yú shì",
+  "wú yǐng wú zōng",
+  "dǎ bào bù píng",
+  "fēng chí diàn chè",
+  "dà chī yī jīng",
+  "hā hā dà xiào",
+  "xiǎng fāng shè fǎ",
+  "tāo tāo bù jué"
+];
+
+    const en = [
+      "what",
+  "sentence",
+  "above",
+  "Chinese language",
+  "date",
+  "one",
+  "reading",
+  "we",
+  "do not have",
+  "question",
+  "which",
+  "oneself",
+  "they",
+  "then",
+  "answer",
+  "word",
+  "writing",
+  "below",
+  "meaning",
+  "can",
+  "same",
+  "correct",
+  "based on",
+  "pronunciation",
+  "mother",
+  "common people",
+  "think",
+  "know",
+  "child",
+  "get up",
+  "life",
+  "author",
+  "for",
+  "idiom",
+  "text",
+  "explanation",
+  "this",
+  "everyone",
+  "because",
+  "country",
+  "people",
+  "study",
+  "underline",
+  "like this",
+  "time",
+  "teacher",
+  "feel",
+  "how",
+  "Cao Cao",
+  "State of Zhao",
+  "how",
+  "Hua Tuo",
+  "time",
+  "decide",
+  "word count",
+  "outer space",
+  "minister",
+  "is not",
+  "already",
+  "Qu Yuan",
+  "world",
+  "friend",
+  "if",
+  "many",
+  "not few",
+  "replace",
+  "one day",
+  "one time",
+  "soldier",
+  "these",
+  "test",
+  "begin",
+  "although",
+  "classmate",
+  "therefore",
+  "how",
+  "park",
+  "State of Chu",
+  "reason",
+  "Xiang Yu",
+  "online",
+  "mouse",
+  "individual",
+  "brackets",
+  "see",
+  "less than",
+  "very",
+  "technique",
+  "practice",
+  "feel",
+  "depressed",
+  "poetic and picturesque",
+  "of no help",
+  "without a trace",
+  "defend someone",
+  "fast as lightning",
+  "greatly shocked",
+  "laugh heartily",
+  "think of a way",
+  "talking endlessly"
+    ];
+
+    const ms = [
+      "apa",
+  "ayat",
+  "di atas",
+  "Bahasa Cina",
+  "tarikh",
+  "satu",
+  "bacaan",
+  "kami",
+  "tiada",
+  "soalan",
+  "yang mana",
+  "diri sendiri",
+  "mereka",
+  "kemudian",
+  "jawab",
+  "perkataan",
+  "tulisan",
+  "di bawah",
+  "makna",
+  "boleh",
+  "sama",
+  "betul",
+  "berdasarkan",
+  "sebutan",
+  "ibu",
+  "rakyat biasa",
+  "berpendapat",
+  "tahu",
+  "kanak-kanak",
+  "bangun",
+  "kehidupan",
+  "penulis",
+  "untuk",
+  "peribahasa",
+  "teks",
+  "penjelasan",
+  "ini",
+  "semua orang",
+  "kerana",
+  "negara",
+  "orang",
+  "belajar",
+  "gariskan",
+  "seperti ini",
+  "masa",
+  "cikgu",
+  "berasa",
+  "bagaimana",
+  "Cao Cao",
+  "Negeri Zhao",
+  "bagaimana",
+  "Hua Tuo",
+  "masa",
+  "memutuskan",
+  "bilangan perkataan",
+  "angkasa lepas",
+  "menteri",
+  "bukan",
+  "sudah",
+  "Qu Yuan",
+  "dunia",
+  "kawan",
+  "jika",
+  "banyak",
+  "bukan sedikit",
+  "menggantikan",
+  "satu hari",
+  "satu kali",
+  "askar",
+  "ini",
+  "ujian",
+  "mula",
+  "walaupun",
+  "rakan sekelas",
+  "oleh itu",
+  "bagaimana",
+  "taman",
+  "Negeri Chu",
+  "sebab",
+  "Xiang Yu",
+  "dalam talian",
+  "tikus",
+  "individu",
+  "kurungan",
+  "nampak",
+  "kurang daripada",
+  "sangat",
+  "teknik",
+  "latihan",
+  "berpendapat",
+  "murung",
+  "indah seperti puisi dan lukisan",
+  "tidak membantu",
+  "tanpa jejak",
+  "membela orang",
+  "laju seperti kilat",
+  "sangat terkejut",
+  "ketawa terbahak-bahak",
+  "cari jalan",
+  "bercakap tanpa henti"
+    ];
+
+    const zhSentences = [
+      "你在做什么？",
+  "请读这个句子。",
+  "请看上面的图片。",
+  "我喜欢上华文课。",
+  "今天是几月几日？",
+  "我有一个苹果。",
+  "我喜欢阅读。",
+  "我们是好学生。",
+  "我没有铅笔。",
+  "我有一个问题。",
+  "哪个是你的书？",
+  "我自己会穿衣服。",
+  "他们在公园里玩。",
+  "然后，我们就回家了。",
+  "请回答我的问题。",
+  "请用这个词语造句。",
+  "请用文字写下来。",
+  "答案写在下面。",
+  "这个字的意思是什么？",
+  "我可以帮你。",
+  "我们的答案相同。",
+  "你的答案是正确的。",
+  "请根据课文回答。",
+  "这个字的读音是什么？",
+  "妈妈在厨房煮饭。",
+  "百姓过着安稳的生活。",
+  "我认为你是对的。",
+  "我知道这个答案。",
+  "那个孩子很可爱。",
+  "请站起来。",
+  "我们的生活很幸福。",
+  "他是这本书的作者。",
+  "为了考到好成绩，我要努力。",
+  "这个成语很有趣。",
+  "今天我们要学新课文。",
+  "老师给我们说明。",
+  "这是我的书。",
+  "大家都是好学生。",
+  "因为下雨，我们不出门。",
+  "马来西亚是个美丽的国家。",
+  "人们在公园里散步。",
+  "我要努力学习。",
+  "请画线。",
+  "这样做好像不对。",
+  "小时候我很快乐。",
+  "老师教我们读书。",
+  "我感到很开心。",
+  "如何做这个模型？",
+  "曹操是三国时期的人物。",
+  "赵国是古代的一个国家。",
+  "你怎么了？",
+  "华佗是古代的名医。",
+  "时间过得很快。",
+  "我决定要好好学习。",
+  "这篇作文的字数够了。",
+  "太空里没有空气。",
+  "大臣向国王报告。",
+  "他不是我的哥哥。",
+  "我已经做完功课了。",
+  "屈原是爱国诗人。",
+  "世界很大。",
+  "他是我的好朋友。",
+  "如果下雨，我们就不去。",
+  "这里有许多花。",
+  "这里有不少人。",
+  "我代替他去开会。",
+  "有一天，我去公园玩。",
+  "我去过一次北京。",
+  "士兵在保卫国家。",
+  "这些书是我的。",
+  "明天我们有测验。",
+  "比赛开始了。",
+  "虽然下雨，我们还是去上学。",
+  "他是我的同学。",
+  "于是，我们就回家了。",
+  "怎样做这道题？",
+  "我们在公园里玩。",
+  "楚国是古代的一个国家。",
+  "迟到是有原因的。",
+  "项羽是古代的将军。",
+  "我们在线上学习。",
+  "老鼠在偷吃食物。",
+  "每个人都有个人的想法。",
+  "请把答案写在括号里。",
+  "我看到一只小鸟。",
+  "我的分数少于他。",
+  "这朵花非常美丽。",
+  "这是一种新的手法。",
+  "我们要多练习写字。",
+  "我觉得这道题很难。",
+  "他垂头丧气地坐在那里。",
+  "这里的风景诗情画意。",
+  "哭也无济于事。",
+  "小偷跑得无影无踪。",
+  "我们要为弱者打抱不平。",
+  "跑车风驰电掣地开过。",
+  "我大吃一惊。",
+  "大家哈哈大笑。",
+  "他想方设法解决问题。",
+  "他滔滔不绝地说话。"
+    ];
+
+    const enSentences = [
+      "What are you doing?",
+  "Please read this sentence.",
+  "Please look at the picture above.",
+  "I like to learn Chinese.",
+  "What is the date today?",
+  "I have an apple.",
+  "I like to read.",
+  "We are good students.",
+  "I do not have a pencil.",
+  "I have a question.",
+  "Which is your book?",
+  "I can wear clothes by myself.",
+  "They play in the park.",
+  "Then, we went home.",
+  "Please answer my question.",
+  "Please make a sentence with this word.",
+  "Please write it down in words.",
+  "The answer is written below.",
+  "What is the meaning of this word?",
+  "I can help you.",
+  "Our answers are the same.",
+  "Your answer is correct.",
+  "Please answer based on the text.",
+  "What is the pronunciation of this word?",
+  "Mother is cooking in the kitchen.",
+  "The common people live peacefully.",
+  "I think you are right.",
+  "I know this answer.",
+  "That child is very cute.",
+  "Please stand up.",
+  "Our life is very happy.",
+  "He is the author of this book.",
+  "To get good results, I must work hard.",
+  "This idiom is very interesting.",
+  "Today we will learn a new text.",
+  "The teacher gave us an explanation.",
+  "This is my book.",
+  "Everyone is a good student.",
+  "Because it is raining, we do not go out.",
+  "Malaysia is a beautiful country.",
+  "People walk in the park.",
+  "I want to study hard.",
+  "Please underline.",
+  "Doing it like this seems wrong.",
+  "When I was small, I was very happy.",
+  "The teacher teaches us to read.",
+  "I feel very happy.",
+  "How do you make this model?",
+  "Cao Cao is a figure from the Three Kingdoms period.",
+  "The State of Zhao is an ancient country.",
+  "What is wrong with you?",
+  "Hua Tuo was a famous doctor in ancient times.",
+  "Time passes very quickly.",
+  "I decided to study hard.",
+  "The word count of this essay is enough.",
+  "There is no air in outer space.",
+  "The minister reported to the king.",
+  "He is not my brother.",
+  "I have finished my homework.",
+  "Qu Yuan is a patriotic poet.",
+  "The world is very big.",
+  "He is my good friend.",
+  "If it rains, we will not go.",
+  "There are many flowers here.",
+  "There are quite many people here.",
+  "I replaced him to attend the meeting.",
+  "One day, I went to the park.",
+  "I have been to Beijing once.",
+  "The soldiers are defending the country.",
+  "These books are mine.",
+  "We have a test tomorrow.",
+  "The competition has begun.",
+  "Although it is raining, we still go to school.",
+  "He is my classmate.",
+  "Therefore, we went home.",
+  "How do you do this question?",
+  "We play in the park.",
+  "The State of Chu is an ancient country.",
+  "Being late has a reason.",
+  "Xiang Yu was an ancient general.",
+  "We study online.",
+  "The mouse is stealing food.",
+  "Everyone has their own opinion.",
+  "Please write the answer in the brackets.",
+  "I saw a small bird.",
+  "My marks are less than his.",
+  "This flower is very beautiful.",
+  "This is a new technique.",
+  "We need to practise writing more.",
+  "I feel this question is very hard.",
+  "He sat there feeling depressed.",
+  "The scenery here is poetic and picturesque.",
+  "Crying is of no help.",
+  "The thief disappeared without a trace.",
+  "We must defend the weak.",
+  "The racing car sped past fast as lightning.",
+  "I was greatly shocked.",
+  "Everyone laughed heartily.",
+  "He thought of a way to solve the problem.",
+  "He talked endlessly."
+    ];
+
+    const msSentences = [
+      "Apa yang kamu buat?",
+  "Sila baca ayat ini.",
+  "Sila lihat gambar di atas.",
+  "Saya suka belajar Bahasa Cina.",
+  "Hari ini tarikh berapa?",
+  "Saya ada sebiji epal.",
+  "Saya suka membaca.",
+  "Kami murid yang baik.",
+  "Saya tiada pensel.",
+  "Saya ada satu soalan.",
+  "Yang mana buku kamu?",
+  "Saya sendiri boleh pakai baju.",
+  "Mereka bermain di taman.",
+  "Kemudian, kami pun balik.",
+  "Sila jawab soalan saya.",
+  "Sila bina ayat dengan perkataan ini.",
+  "Sila tulis dengan tulisan.",
+  "Jawapan ditulis di bawah.",
+  "Apa makna perkataan ini?",
+  "Saya boleh menolong anda.",
+  "Jawapan kami sama.",
+  "Jawapan kamu betul.",
+  "Sila jawab berdasarkan teks.",
+  "Apa sebutan perkataan ini?",
+  "Ibu sedang memasak di dapur.",
+  "Rakyat biasa hidup dengan aman.",
+  "Saya berpendapat kamu betul.",
+  "Saya tahu jawapan ini.",
+  "Kanak-kanak itu sangat comel.",
+  "Sila bangun.",
+  "Kehidupan kami sangat bahagia.",
+  "Dia penulis buku ini.",
+  "Untuk mendapat keputusan yang baik, saya mesti berusaha.",
+  "Peribahasa ini sangat menarik.",
+  "Hari ini kami akan belajar teks baharu.",
+  "Cikgu memberi kami penjelasan.",
+  "Ini buku saya.",
+  "Semua orang murid yang baik.",
+  "Kerana hujan, kami tidak keluar rumah.",
+  "Malaysia ialah negara yang cantik.",
+  "Orang ramai berjalan di taman.",
+  "Saya mahu belajar bersungguh-sungguh.",
+  "Sila gariskan.",
+  "Buat macam ini nampak salah.",
+  "Semasa kecil saya sangat gembira.",
+  "Cikgu mengajar kami membaca.",
+  "Saya rasa sangat gembira.",
+  "Bagaimana membuat model ini?",
+  "Cao Cao ialah tokoh zaman Tiga Kerajaan.",
+  "Negeri Zhao ialah sebuah negara purba.",
+  "Kenapa kamu?",
+  "Hua Tuo ialah doktor terkenal zaman dahulu.",
+  "Masa berlalu dengan sangat cepat.",
+  "Saya memutuskan untuk belajar bersungguh-sungguh.",
+  "Bilangan perkataan karangan ini sudah cukup.",
+  "Tiada udara di angkasa lepas.",
+  "Menteri melapor kepada raja.",
+  "Dia bukan abang saya.",
+  "Saya sudah siap membuat kerja rumah.",
+  "Qu Yuan ialah penyair yang mencintai negara.",
+  "Dunia sangat besar.",
+  "Dia ialah kawan baik saya.",
+  "Jika hujan, kami tidak pergi.",
+  "Terdapat banyak bunga di sini.",
+  "Terdapat ramai orang di sini.",
+  "Saya menggantikan dia untuk bermesyuarat.",
+  "Pada suatu hari, saya pergi ke taman.",
+  "Saya pernah pergi ke Beijing sekali.",
+  "Askar sedang mempertahankan negara.",
+  "Buku-buku ini ialah milik saya.",
+  "Esok kami ada ujian.",
+  "Pertandingan telah bermula.",
+  "Walaupun hujan, kami tetap pergi ke sekolah.",
+  "Dia rakan sekelas saya.",
+  "Oleh itu, kami pun balik.",
+  "Bagaimana buat soalan ini?",
+  "Kami bermain di taman.",
+  "Negeri Chu ialah sebuah negara purba.",
+  "Lewat itu ada sebabnya.",
+  "Xiang Yu ialah seorang jeneral zaman dahulu.",
+  "Kami belajar dalam talian.",
+  "Tikus sedang mencuri makanan.",
+  "Setiap orang mempunyai pendapat sendiri.",
+  "Sila tulis jawapan di dalam kurungan.",
+  "Saya nampak seekor burung kecil.",
+  "Markah saya kurang daripada dia.",
+  "Bunga ini sangat cantik.",
+  "Ini ialah satu teknik baharu.",
+  "Kita perlu banyak berlatih menulis.",
+  "Saya rasa soalan ini sangat susah.",
+  "Dia duduk di situ dengan murung.",
+  "Pemandangan di sini indah seperti puisi dan lukisan.",
+  "Menangis pun tidak membantu.",
+  "Pencuri itu hilang tanpa jejak.",
+  "Kita harus membela orang yang kena tindas.",
+  "Kereta lumba itu memecut laju seperti kilat.",
+  "Saya sangat terkejut.",
+  "Semua orang ketawa terbahak-bahak.",
+  "Dia cuba cari jalan untuk selesaikan masalah.",
+  "Dia bercakap tanpa henti."
+    ];
+
+    // ===== Set 词库管理 =====
+const wordSets = {
+  "Set 1": {
+    zh: zh,
+    py: py,
+    en: en,
+    ms: ms,
+
+zhMeaning: [
+    "问东西的词。",
+  "完整的一句话。",
+  "在表面。",
+  "中文科目。",
+  "几月几日。",
+  "一个人或一样东西。",
+  "看书或读文章。",
+  "我们大家。",
+  "不是或不。",
+  "要问的问题。",
+  "哪一个。",
+  "自己。",
+  "别人。",
+  "之后。",
+  "问题的解答。",
+  "语言里的词。",
+  "写出来的字。",
+  "在下面。",
+  "意思或目的。",
+  "可以或有能力。",
+  "一模一样。",
+  "对的，没有错。",
+  "根据或参考。",
+  "念出词语的声音。",
+  "生下我们的女人。",
+  "普通的人民。",
+  "我觉得。",
+  "明白或懂。",
+  "年纪小的人。",
+  "站起来或开始做。",
+  "活着的过程。",
+  "写书的人。",
+  "为了某个目的。",
+  "有特别意思的短语。",
+  "书里的文章或内容。",
+  "解释或说清楚。",
+  "这个。",
+  "所有人。",
+  "因为某件事。",
+  "有政府的地方。",
+  "所有人。",
+  "学习知识。",
+  "画线条。",
+  "像这样。",
+  "发生的时间。",
+  "教书的人。",
+  "心里的感觉。",
+  "如何做。",
+  "三国时期的著名人物。",
+  "中国古代的诸侯国。",
+  "如何。",
+  "中国古代名医。",
+  "过去或现在的时间。",
+  "做出选择。",
+  "文章的字数。",
+  "地球外面的空间。",
+  "古代的高级官员。",
+  "不是或不。",
+  "已经发生了。",
+  "中国古代爱国诗人。",
+  "大家住的地方。",
+  "好朋友。",
+  "如果或假如。",
+  "很多。",
+  "不是很少，也很多。",
+  "替换或取代。",
+  "一天的时间。",
+  "一次。",
+  "打仗的人。",
+  "这些东西。",
+  "用来测试的考试。",
+  "开始。",
+  "虽然或尽管。",
+  "一起读书的人。",
+  "于是或所以。",
+  "如何做。",
+  "玩的地方。",
+  "中国古代的诸侯国。",
+  "事情发生的原因。",
+  "中国古代的著名将领。",
+  "通过互联网。",
+  "会偷吃东西的小动物。",
+  "一个人。",
+  "用来括住文字的符号。",
+  "用眼睛看。",
+  "比……少。",
+  "非常或很。",
+  "做事情的方法。",
+  "反复地做来熟练。",
+  "我觉得。",
+  "形容非常失望，没有精神。",
+  "像诗和画一样美丽。",
+  "对事情没有帮助。",
+  "一点痕迹也没有。",
+  "帮助受欺负的人。",
+  "跑得像闪电一样快。",
+  "非常惊讶。",
+  "大声地笑。",
+  "想尽办法。",
+  "说话连续不断。"
+  ],
+
+  msMeaning: [
+    "Soalan untuk tanya benda.",
+  "Susunan perkataan yang lengkap.",
+  "Di bahagian atas.",
+  "Bahasa Cina.",
+  "Hari dan bulan.",
+  "Satu benda atau orang.",
+  "Baca buku atau tulisan.",
+  "Kata ganti nama diri orang ramai.",
+  "Tiada atau tidak ada.",
+  "Soalan untuk ditanya.",
+  "Yang mana satu.",
+  "Diri sendiri.",
+  "Orang lain.",
+  "Selepas itu.",
+  "Jawapan kepada soalan.",
+  "Perkataan dalam bahasa.",
+  "Tulisan atau perkataan.",
+  "Di bahagian bawah.",
+  "Maksud atau tujuan.",
+  "Boleh atau mampu.",
+  "Sama atau tidak berbeza.",
+  "Betul atau tepat.",
+  "Ikut atau guna sebagai asas.",
+  "Cara menyebut perkataan.",
+  "Perempuan yang melahirkan kita.",
+  "Rakyat biasa.",
+  "Fikir atau rasa.",
+  "Faham atau mengerti.",
+  "Budak yang masih kecil.",
+  "Bangun dari tempat duduk.",
+  "Keadaan hidup kita.",
+  "Orang yang menulis buku.",
+  "Kata untuk tujuan.",
+  "Ungkapan yang ada makna khas.",
+  "Tulisan atau bacaan dalam buku.",
+  "Tunjuk atau beritahu cara.",
+  "Kata untuk tunjuk benda dekat.",
+  "Semua orang.",
+  "Sebab sesuatu berlaku.",
+  "Kawasan yang ada kerajaan.",
+  "Semua manusia.",
+  "Belajar atau menuntut ilmu.",
+  "Lukis garisan.",
+  "Macam ini.",
+  "Masa bila sesuatu berlaku.",
+  "Orang yang mengajar.",
+  "Rasa atau alami sendiri.",
+  "Bagaimana atau macam mana.",
+  "Nama seorang tokoh sejarah.",
+  "Nama sebuah negeri dalam sejarah China.",
+  "Bagaimana atau macam mana.",
+  "Nama seorang doktor terkenal dalam sejarah.",
+  "Masa yang berlalu.",
+  "Buat pilihan atau putuskan.",
+  "Bilangan perkataan dalam karangan.",
+  "Tempat di luar bumi.",
+  "Pegawai tinggi kerajaan.",
+  "Bukan atau tidak.",
+  "Sudah berlaku.",
+  "Nama seorang penyair terkenal.",
+  "Tempat semua orang tinggal.",
+  "Orang yang rapat dengan kita.",
+  "Kalau atau andai kata.",
+  "Banyak atau ramai.",
+  "Bukan sedikit, ramai juga.",
+  "Ganti atau tukar dengan yang lain.",
+  "Satu hari.",
+  "Satu kali.",
+  "Orang yang berjuang dalam perang.",
+  "Benda atau perkara yang dekat.",
+  "Ujian untuk menguji pengetahuan.",
+  "Mula atau bermula.",
+  "Walaupun atau meskipun.",
+  "Rakan sekelas.",
+  "Oleh itu atau lalu.",
+  "Bagaimana atau macam mana.",
+  "Tempat untuk bermain.",
+  "Nama sebuah negeri dalam sejarah China.",
+  "Sebab sesuatu berlaku.",
+  "Nama seorang pahlawan sejarah.",
+  "Melalui internet.",
+  "Haiwan kecil yang suka makan.",
+  "Satu orang.",
+  "Tanda untuk letak perkataan tambahan.",
+  "Nampak atau lihat.",
+  "Kurang daripada.",
+  "Sangat atau amat.",
+  "Cara buat sesuatu.",
+  "Latihan atau ulang kaji.",
+  "Fikir atau rasa.",
+  "Rasa sangat sedih dan tidak bermaya.",
+  "Sangat indah seperti puisi dan lukisan.",
+  "Tidak dapat menolong atau menyelesaikan masalah.",
+  "Hilang tanpa jejak.",
+  "Bela atau tolong orang yang kena tindas.",
+  "Sangat laju seperti kilat.",
+  "Sangat terkejut.",
+  "Ketawa dengan kuat.",
+  "Cuba cari cara untuk selesaikan.",
+  "Bercakap tanpa henti."
+  ],
+
+  enMeaning: [
+    "A word to ask about things.",
+  "A complete sentence.",
+  "On the surface.",
+  "The Chinese subject.",
+  "The day and month.",
+  "One person or thing.",
+  "To read books or texts.",
+  "We people.",
+  "Do not have.",
+  "A question to ask.",
+  "Which one.",
+  "Oneself.",
+  "Other people.",
+  "After that.",
+  "The reply to a question.",
+  "A word in a language.",
+  "Written words.",
+  "At the bottom.",
+  "Meaning or purpose.",
+  "Can or able to.",
+  "Exactly the same.",
+  "Right, no mistake.",
+  "Based on.",
+  "The sound of a word.",
+  "The woman who gave birth to us.",
+  "Ordinary people.",
+  "I think or feel.",
+  "To understand or be aware.",
+  "A young person.",
+  "To stand up or start.",
+  "The process of living.",
+  "The person who writes a book.",
+  "For a purpose.",
+  "A phrase with a special meaning.",
+  "A text or passage in a book.",
+  "To explain or make clear.",
+  "This.",
+  "Everyone.",
+  "Because of something.",
+  "A place with a government.",
+  "All humans.",
+  "To learn knowledge.",
+  "To draw a line.",
+  "Like this.",
+  "The time something happens.",
+  "A person who teaches.",
+  "A feeling in the heart.",
+  "How to do.",
+  "A famous person in the Three Kingdoms.",
+  "An ancient state in China.",
+  "How.",
+  "A famous ancient Chinese doctor.",
+  "The past or present time.",
+  "To make a choice.",
+  "The number of words in an essay.",
+  "The space outside Earth.",
+  "A high official in ancient times.",
+  "Is not.",
+  "Already happened.",
+  "A famous ancient Chinese poet.",
+  "The place everyone lives.",
+  "A good friend.",
+  "If.",
+  "Many.",
+  "Not few, quite many.",
+  "To replace.",
+  "One day.",
+  "One time.",
+  "A person who fights in a war.",
+  "These things.",
+  "A test to check knowledge.",
+  "To begin.",
+  "Although.",
+  "People who study together.",
+  "Therefore.",
+  "How.",
+  "A place to play.",
+  "An ancient state in China.",
+  "The reason something happens.",
+  "A famous ancient Chinese general.",
+  "Through the internet.",
+  "A small animal that steals food.",
+  "One person.",
+  "A sign to put extra words.",
+  "To see with your eyes.",
+  "Less than.",
+  "Very or extremely.",
+  "The way to do something.",
+  "To do repeatedly to get better.",
+  "I think or feel.",
+  "Very sad and with no energy.",
+  "Beautiful like a poem and a painting.",
+  "Of no help.",
+  "Without a trace.",
+  "To help someone being bullied.",
+  "Fast like lightning.",
+  "Greatly shocked.",
+  "To laugh loudly.",
+  "To think of a way.",
+  "To talk endlessly."
+  ],
+
+    zhSentences: zhSentences,
+    enSentences: enSentences,
+    msSentences: msSentences
+  },
+
+  "Set 2": {
+    zh: [
+      
+  "爷爷",
+  "修辞手法",
+  "年轻",
+  "经过",
+  "面对",
+  "事情",
+  "传统",
+  "蚯蚓",
+  "有关",
+  "看见",
+  "写出",
+  "所以",
+  "提供",
+  "喜欢",
+  "地方",
+  "年级",
+  "答案",
+  "不可",
+  "发现",
+  "那个",
+  "生命",
+  "孟获",
+  "动物",
+  "理解",
+  "赵王",
+  "心情",
+  "其他",
+  "就是",
+  "语文",
+  "一段",
+  "不能",
+  "母亲",
+  "故事",
+  "资料",
+  "十分",
+  "游戏",
+  "先生",
+  "发生",
+  "巨石",
+  "别人",
+  "形容",
+  "表示",
+  "文章",
+  "得到",
+  "自然",
+  "主人",
+  "可是",
+  "来到",
+  "找出",
+  "相近",
+  "麦子",
+  "单元",
+  "出来",
+  "知识",
+  "现在",
+  "岳飞",
+  "以后",
+  "家人",
+  "网络",
+  "但是",
+  "一种",
+  "方法",
+  "哪些",
+  "一边",
+  "眼睛",
+  "努力",
+  "下来",
+  "这种",
+  "东西",
+  "曹植",
+  "军队",
+  "泰国",
+  "不会",
+  "受到",
+  "终于",
+  "准备",
+  "选择",
+  "合唱",
+  "只有",
+  "诚信",
+  "葛洪",
+  "地上",
+  "心里",
+  "赵军",
+  "成为",
+  "农场",
+  "有人",
+  "无法",
+  "医生",
+  "齐国",
+  "欣欣向荣",
+  "不知所措",
+  "如坐针毡",
+  "稳操胜券",
+  "微不足道",
+  "闷闷不乐",
+  "晴天霹雳",
+  "目瞪口呆",
+  "首屈一指",
+  "伤痕累累"
+
+],
+
+    py: [
+      
+  "yé ye",                 // 爷爷
+  "xiū cí shǒu fǎ",        // 修辞手法
+  "nián qīng",             // 年轻
+  "jīng guò",              // 经过
+  "miàn duì",              // 面对
+  "shì qing",              // 事情
+  "chuán tǒng",            // 传统
+  "qiū yǐn",               // 蚯蚓
+  "yǒu guān",              // 有关
+  "kàn jiàn",              // 看见
+  "xiě chū",               // 写出
+  "suǒ yǐ",                // 所以
+  "tí gōng",               // 提供
+  "xǐ huān",               // 喜欢
+  "dì fang",               // 地方
+  "nián jí",               // 年级
+  "dá àn",                 // 答案
+  "bù kě",                 // 不可
+  "fā xiàn",               // 发现
+  "nà gè",                 // 那个
+  "shēng mìng",            // 生命
+  "mèng huò",              // 孟获
+  "dòng wù",               // 动物
+  "lǐ jiě",                // 理解
+  "zhào wáng",             // 赵王
+  "xīn qíng",              // 心情
+  "qí tā",                 // 其他
+  "jiù shì",               // 就是
+  "yǔ wén",                // 语文
+  "yī duàn",               // 一段
+  "bù néng",               // 不能
+  "mǔ qīn",                // 母亲
+  "gù shi",                // 故事
+  "zī liào",               // 资料
+  "shí fēn",               // 十分
+  "yóu xì",                // 游戏
+  "xiān sheng",            // 先生
+  "fā shēng",              // 发生
+  "jù shí",                // 巨石
+  "bié rén",               // 别人
+  "xíng róng",             // 形容
+  "biǎo shì",              // 表示
+  "wén zhāng",             // 文章
+  "dé dào",                // 得到
+  "zì rán",                // 自然
+  "zhǔ rén",               // 主人
+  "kě shì",                // 可是
+  "lái dào",               // 来到
+  "zhǎo chū",              // 找出
+  "xiāng jìn",             // 相近
+  "mài zi",                // 麦子
+  "dān yuán",              // 单元
+  "chū lái",               // 出来
+  "zhī shi",               // 知识
+  "xiàn zài",              // 现在
+  "yuè fēi",               // 岳飞
+  "yǐ hòu",                // 以后
+  "jiā rén",               // 家人
+  "wǎng luò",              // 网络
+  "dàn shì",               // 但是
+  "yī zhǒng",              // 一种
+  "fāng fǎ",               // 方法
+  "nǎ xiē",                // 哪些
+  "yī biān",               // 一边
+  "yǎn jing",              // 眼睛
+  "nǔ lì",                 // 努力
+  "xià lái",               // 下来
+  "zhè zhǒng",             // 这种
+  "dōng xi",               // 东西
+  "cáo zhí",               // 曹植
+  "jūn duì",               // 军队
+  "tài guó",               // 泰国
+  "bù huì",                // 不会
+  "shòu dào",              // 受到
+  "zhōng yú",              // 终于
+  "zhǔn bèi",              // 准备
+  "xuǎn zé",               // 选择
+  "hé chàng",              // 合唱
+  "zhǐ yǒu",               // 只有
+  "chéng xìn",             // 诚信
+  "gé hóng",               // 葛洪
+  "dì shàng",              // 地上
+  "xīn lǐ",                // 心里
+  "zhào jūn",              // 赵军
+  "chéng wéi",             // 成为
+  "nóng chǎng",            // 农场
+  "yǒu rén",               // 有人
+  "wú fǎ",                 // 无法
+  "yī shēng",              // 医生
+  "qí guó",                // 齐国
+  "xīn xīn xiàng róng",    // 欣欣向荣
+  "bù zhī suǒ cuò",        // 不知所措
+  "rú zuò zhēn zhān",      // 如坐针毡
+  "wěn cāo shèng quàn",    // 稳操胜券
+  "wēi bù zú dào",         // 微不足道
+  "mèn mèn bù lè",         // 闷闷不乐
+  "qíng tiān pī lì",       // 晴天霹雳
+  "mù dèng kǒu dāi",       // 目瞪口呆
+  "shǒu qū yī zhǐ",        // 首屈一指
+  "shāng hén lěi lěi"      // 伤痕累累
+  
+  ],
+
+
+    en: [
+      
+  "grandfather",           // 爷爷
+  "rhetorical device",     // 修辞手法
+  "young",                 // 年轻
+  "pass by",               // 经过
+  "face",                  // 面对
+  "matter",                // 事情
+  "tradition",             // 传统
+  "earthworm",             // 蚯蚓
+  "related",               // 有关
+  "see",                   // 看见
+  "write out",             // 写出
+  "so",                    // 所以
+  "provide",               // 提供
+  "like",                  // 喜欢
+  "place",                 // 地方
+  "grade",                 // 年级
+  "answer",                // 答案
+  "cannot",                // 不可
+  "discover",              // 发现
+  "that",                  // 那个
+  "life",                  // 生命
+  "Meng Huo",              // 孟获
+  "animal",                // 动物
+  "understand",            // 理解
+  "King of Zhao",          // 赵王
+  "mood",                  // 心情
+  "other",                 // 其他
+  "is exactly",            // 就是
+  "Chinese language",      // 语文
+  "a paragraph",           // 一段
+  "cannot",                // 不能
+  "mother",                // 母亲
+  "story",                 // 故事
+  "material",              // 资料
+  "very",                  // 十分
+  "game",                  // 游戏
+  "mister",                // 先生
+  "happen",                // 发生
+  "boulder",               // 巨石
+  "other people",          // 别人
+  "describe",              // 形容
+  "show",                  // 表示
+  "article",               // 文章
+  "get",                   // 得到
+  "nature",                // 自然
+  "owner",                 // 主人
+  "but",                   // 可是
+  "come to",               // 来到
+  "find out",              // 找出
+  "similar",               // 相近
+  "wheat",                 // 麦子
+  "unit",                  // 单元
+  "come out",              // 出来
+  "knowledge",             // 知识
+  "now",                   // 现在
+  "Yue Fei",               // 岳飞
+  "after",                 // 以后
+  "family member",         // 家人
+  "network",               // 网络
+  "but",                   // 但是
+  "one kind",              // 一种
+  "method",                // 方法
+  "which",                 // 哪些
+  "one side",              // 一边
+  "eyes",                  // 眼睛
+  "effort",                // 努力
+  "come down",             // 下来
+  "this kind",             // 这种
+  "thing",                 // 东西
+  "Cao Zhi",               // 曹植
+  "army",                  // 军队
+  "Thailand",              // 泰国
+  "will not",              // 不会
+  "receive",               // 受到
+  "finally",               // 终于
+  "prepare",               // 准备
+  "choose",                // 选择
+  "chorus",                // 合唱
+  "only",                  // 只有
+  "honesty",               // 诚信
+  "Ge Hong",               // 葛洪
+  "on the ground",         // 地上
+  "in the heart",          // 心里
+  "Zhao army",             // 赵军
+  "become",                // 成为
+  "farm",                  // 农场
+  "someone",               // 有人
+  "cannot",                // 无法
+  "doctor",                // 医生
+  "State of Qi",           // 齐国
+  "thriving",              // 欣欣向荣
+  "at a loss",             // 不知所措
+  "on pins and needles",   // 如坐针毡
+  "sure to win",           // 稳操胜券
+  "insignificant",         // 微不足道
+  "unhappy",               // 闷闷不乐
+  "a bolt from the blue",  // 晴天霹雳
+  "stunned",               // 目瞪口呆
+  "second to none",        // 首屈一指
+  "covered in scars"       // 伤痕累累
+  
+],
+
+
+    ms: [
+      
+  "atuk",                  // 爷爷
+  "gaya bahasa",           // 修辞手法
+  "muda",                  // 年轻
+  "melalui",               // 经过
+  "menghadapi",            // 面对
+  "perkara",               // 事情
+  "tradisi",               // 传统
+  "cacing tanah",          // 蚯蚓
+  "berkaitan",             // 有关
+  "nampak",                // 看见
+  "tulis",                 // 写出
+  "oleh itu",              // 所以
+  "menyediakan",           // 提供
+  "suka",                  // 喜欢
+  "tempat",                // 地方
+  "tahun",                 // 年级
+  "jawapan",               // 答案
+  "tidak boleh",           // 不可
+  "menemui",               // 发现
+  "itu",                   // 那个
+  "nyawa",                 // 生命
+  "Meng Huo",              // 孟获
+  "haiwan",                // 动物
+  "faham",                 // 理解
+  "Raja Zhao",             // 赵王
+  "perasaan",              // 心情
+  "lain",                  // 其他
+  "ialah",                 // 就是
+  "Bahasa Cina",           // 语文
+  "satu perenggan",        // 一段
+  "tidak boleh",           // 不能
+  "ibu",                   // 母亲
+  "cerita",                // 故事
+  "bahan",                 // 资料
+  "sangat",                // 十分
+  "permainan",             // 游戏
+  "tuan",                  // 先生
+  "berlaku",               // 发生
+  "batu besar",            // 巨石
+  "orang lain",            // 别人
+  "menggambarkan",         // 形容
+  "menunjukkan",           // 表示
+  "artikel",               // 文章
+  "mendapat",              // 得到
+  "alam semula jadi",      // 自然
+  "tuan",                  // 主人
+  "tetapi",                // 可是
+  "datang ke",             // 来到
+  "cari",                  // 找出
+  "hampir sama",           // 相近
+  "gandum",                // 麦子
+  "unit",                  // 单元
+  "keluar",                // 出来
+  "pengetahuan",           // 知识
+  "sekarang",              // 现在
+  "Yue Fei",               // 岳飞
+  "selepas",               // 以后
+  "ahli keluarga",         // 家人
+  "rangkaian",             // 网络
+  "tetapi",                // 但是
+  "satu jenis",            // 一种
+  "kaedah",                // 方法
+  "yang mana",             // 哪些
+  "sebelah",               // 一边
+  "mata",                  // 眼睛
+  "usaha",                 // 努力
+  "turun",                 // 下来
+  "jenis ini",             // 这种
+  "benda",                 // 东西
+  "Cao Zhi",               // 曹植
+  "tentera",               // 军队
+  "Thailand",              // 泰国
+  "tidak akan",            // 不会
+  "menerima",              // 受到
+  "akhirnya",              // 终于
+  "bersedia",              // 准备
+  "memilih",               // 选择
+  "korus",                 // 合唱
+  "hanya",                 // 只有
+  "kejujuran",             // 诚信
+  "Ge Hong",               // 葛洪
+  "di atas tanah",         // 地上
+  "dalam hati",            // 心里
+  "tentera Zhao",          // 赵军
+  "menjadi",               // 成为
+  "ladang",                // 农场
+  "ada orang",             // 有人
+  "tidak dapat",           // 无法
+  "doktor",                // 医生
+  "Negeri Qi",             // 齐国
+  "berkembang maju",       // 欣欣向荣
+  "keliru",                // 不知所措
+  "gelisah",               // 如坐针毡
+  "pasti menang",          // 稳操胜券
+  "tidak penting",         // 微不足道
+  "tidak gembira",         // 闷闷不乐
+  "berita buruk tiba-tiba", // 晴天霹雳
+  "terkejut",              // 目瞪口呆
+  "terbaik",               // 首屈一指
+  "penuh parut"            // 伤痕累累
+  
+],
+
+zhMeaning: [
+  "爸爸的爸爸。",                                 // 爷爷
+  "让句子变美的写作技巧。",                       // 修辞手法
+  "年纪不大。",                                   // 年轻
+  "通过或路过某处。",                             // 经过
+  "面对面对人或事。",                             // 面对
+  "发生的事。",                                   // 事情
+  "从以前传下来的风俗。",                         // 传统
+  "住在地里的小虫。",                             // 蚯蚓
+  "有联系或相关。",                               // 有关
+  "用眼睛看到。",                                 // 看见
+  "写出来。",                                     // 写出
+  "因此。",                                       // 所以
+  "给或准备。",                                   // 提供
+  "对人或事物有好感。",                           // 喜欢
+  "一个位置。",                                   // 地方
+  "读书的级别。",                                 // 年级
+  "问题的解答。",                                 // 答案
+  "不可以或不能。",                               // 不可
+  "找到新东西。",                                 // 发现
+  "那个。",                                       // 那个
+  "活着或生命。",                                 // 生命
+  "三国时期的历史人物。",                         // 孟获
+  "小动物。",                                     // 动物
+  "明白或懂。",                                   // 理解
+  "古代的一位国王。",                             // 赵王
+  "心里的感觉。",                                 // 心情
+  "其他的人或事。",                               // 其他
+  "正是或就是。",                                 // 就是
+  "中文科目。",                                   // 语文
+  "文章的一小段。",                               // 一段
+  "不可以或不能。",                               // 不能
+  "生下我们的女人。",                             // 母亲
+  "讲的事情。",                                   // 故事
+  "用来参考的东西。",                             // 资料
+  "非常或很。",                                   // 十分
+  "玩的东西。",                                   // 游戏
+  "对男性的称呼。",                               // 先生
+  "事情出现。",                                   // 发生
+  "非常大的石头。",                               // 巨石
+  "别的人。",                                     // 别人
+  "描述事物的样子。",                             // 形容
+  "展示或说明。",                                 // 表示
+  "写出来的文字。",                               // 文章
+  "获得或取得。",                                 // 得到
+  "大自然。",                                     // 自然
+  "拥有东西的人。",                               // 主人
+  "但是或不过。",                                 // 可是
+  "来到某个地方。",                               // 来到
+  "寻找并发现。",                                 // 找出
+  "差不多一样。",                                 // 相近
+  "用来做面粉的植物。",                           // 麦子
+  "书里的一个部分。",                             // 单元
+  "从里面到外面。",                               // 出来
+  "学到的东西。",                                 // 知识
+  "现在这个时候。",                               // 现在
+  "中国古代的英雄。",                             // 岳飞
+  "之后或未来。",                                 // 以后
+  "家里的人。",                                   // 家人
+  "互联网。",                                     // 网络
+  "但是或不过。",                                 // 但是
+  "一个种类。",                                   // 一种
+  "做事情的方式。",                               // 方法
+  "哪一些。",                                     // 哪些
+  "旁边或同时做。",                               // 一边
+  "用来看东西的器官。",                           // 眼睛
+  "尽力去做。",                                   // 努力
+  "从上面到下面。",                               // 下来
+  "这一种。",                                     // 这种
+  "物品或事情。",                                 // 东西
+  "三国时期的诗人。",                             // 曹植
+  "打仗的士兵。",                                 // 军队
+  "一个东南亚国家。",                             // 泰国
+  "不可能或做不到。",                             // 不会
+  "得到或遭到。",                                 // 受到
+  "最后或总算。",                                 // 终于
+  "事先安排好。",                                 // 准备
+  "挑选或决定。",                                 // 选择
+  "大家一起唱歌。",                               // 合唱
+  "仅仅或只有这个。",                             // 只有
+  "诚实守信。",                                   // 诚信
+  "中国古代的医学家。",                           // 葛洪
+  "地面上。",                                     // 地上
+  "内心里。",                                     // 心里
+  "赵国的军队。",                                 // 赵军
+  "变成。",                                       // 成为
+  "种田养殖的地方。",                             // 农场
+  "某些人。",                                     // 有人
+  "做不到或没办法。",                             // 无法
+  "治病的人。",                                   // 医生
+  "古代的一个国家。",                             // 齐国
+  "形容事业蓬勃发展，繁荣昌盛。",                 // 欣欣向荣
+  "不知道该怎么办，形容很慌乱。",                 // 不知所措
+  "像坐在插了针的毡子上，形容非常不安。",         // 如坐针毡
+  "比喻有绝对把握取得胜利。",                     // 稳操胜券
+  "非常渺小，不值得一提。",                       // 微不足道
+  "心里不高兴，烦闷。",                           // 闷闷不乐
+  "晴天打响雷，比喻突然发生的意外事件。",         // 晴天霹雳
+  "眼睛睁得大大的，形容受惊而愣住的样子。",       // 目瞪口呆
+  "排在第一位，形容最优秀。",                     // 首屈一指
+  "满身都是伤痕，形容受伤很多。"                  // 伤痕累累
+  ],
+
+  msMeaning: [
+  
+  "Bapa kepada ibu atau ayah kita.",            // 爷爷
+  "Cara guna bahasa untuk buat ayat lebih cantik.", // 修辞手法
+  "Belum tua, masih kecil umurnya.",            // 年轻
+  "Lalu atau melalui sesuatu tempat.",          // 经过
+  "Berhadapan dengan sesuatu.",                 // 面对
+  "Sesuatu perkara atau hal.",                  // 事情
+  "Sesuatu yang diwarisi dari dahulu.",         // 传统
+  "Haiwan kecil yang hidup di dalam tanah.",    // 蚯蚓
+  "Ada kaitan.",                                // 有关
+  "Nampak atau lihat.",                         // 看见
+  "Tulis jawapan atau perkataan.",              // 写出
+  "Oleh itu atau jadi.",                        // 所以
+  "Beri atau sediakan.",                        // 提供
+  "Rasa seronok.",                              // 喜欢
+  "Tempat atau kawasan.",                       // 地方
+  "Tahap pembelajaran di sekolah.",             // 年级
+  "Jawapan kepada soalan.",                     // 答案
+  "Tidak boleh atau tidak mampu.",              // 不可
+  "Jumpa atau tahu sesuatu baharu.",            // 发现
+  "Kata untuk tunjuk benda jauh.",              // 那个
+  "Nyawa atau hidup.",                          // 生命
+  "Nama seorang tokoh sejarah.",                // 孟获
+  "Haiwan atau binatang.",                      // 动物
+  "Faham atau mengerti.",                       // 理解
+  "Nama seorang raja dalam sejarah.",           // 赵王
+  "Perasaan dalam hati.",                       // 心情
+  "Lain atau bukan yang ini.",                  // 其他
+  "Ialah atau adalah.",                         // 就是
+  "Bahasa Cina.",                               // 语文
+  "Satu bahagian kecil dalam karangan.",        // 一段
+  "Tidak boleh atau tidak mampu.",              // 不能
+  "Perempuan yang melahirkan kita.",            // 母亲
+  "Cerita atau kisah.",                         // 故事
+  "Bahan atau maklumat.",                       // 资料
+  "Sangat atau amat.",                          // 十分
+  "Benda untuk bermain.",                       // 游戏
+  "Panggilan untuk lelaki.",                    // 先生
+  "Berlaku atau terjadi.",                      // 发生
+  "Batu yang sangat besar.",                    // 巨石
+  "Orang lain.",                                // 别人
+  "Menggambarkan atau terangkan sifat.",        // 形容
+  "Tunjuk atau nyatakan.",                      // 表示
+  "Tulisan atau karangan.",                     // 文章
+  "Dapat atau memperoleh.",                     // 得到
+  "Dunia dan tumbuhan.",                        // 自然
+  "Orang yang memiliki sesuatu.",               // 主人
+  "Tetapi atau namun.",                         // 可是
+  "Datang ke sesuatu tempat.",                  // 来到
+  "Cari atau jumpa.",                           // 找出
+  "Hampir sama atau tidak jauh beza.",          // 相近
+  "Tumbuhan yang dibuat tepung.",               // 麦子
+  "Satu bahagian dalam buku.",                  // 单元
+  "Keluar atau muncul.",                        // 出来
+  "Ilmu atau maklumat.",                        // 知识
+  "Masa sekarang.",                             // 现在
+  "Nama seorang pahlawan sejarah.",             // 岳飞
+  "Selepas atau kemudian.",                     // 以后
+  "Orang yang ada hubungan darah.",             // 家人
+  "Sistem untuk berkomunikasi.",                // 网络
+  "Tetapi atau namun.",                         // 但是
+  "Satu jenis atau satu macam.",                // 一种
+  "Cara buat sesuatu.",                         // 方法
+  "Yang mana satu.",                            // 哪些
+  "Sebelah atau satu sisi.",                    // 一边
+  "Anggota badan untuk melihat.",               // 眼睛
+  "Usaha atau berusaha.",                       // 努力
+  "Turun ke bawah.",                            // 下来
+  "Jenis ini atau macam ini.",                  // 这种
+  "Benda atau barang.",                         // 东西
+  "Nama seorang penyair sejarah.",              // 曹植
+  "Kumpulan askar.",                            // 军队
+  "Negara Thailand.",                           // 泰国
+  "Tidak akan atau tidak mungkin.",             // 不会
+  "Menerima atau kena sesuatu.",                // 受到
+  "Akhirnya atau selepas lama menunggu.",       // 终于
+  "Bersedia atau sediakan.",                    // 准备
+  "Memilih atau pilih.",                        // 选择
+  "Menyanyi bersama-sama.",                     // 合唱
+  "Hanya atau cuma.",                           // 只有
+  "Jujur atau amanah.",                         // 诚信
+  "Nama seorang tokoh sejarah.",                // 葛洪
+  "Di atas tanah.",                             // 地上
+  "Dalam hati atau fikiran.",                   // 心里
+  "Tentera dari negeri Zhao.",                  // 赵军
+  "Menjadi atau bertukar.",                     // 成为
+  "Tempat menanam pokok atau ternak.",          // 农场
+  "Ada orang atau seseorang.",                  // 有人
+  "Tidak dapat atau tidak mampu.",              // 无法
+  "Orang yang merawat pesakit.",                // 医生
+  "Nama sebuah negeri dalam sejarah.",          // 齐国
+  "Berkembang maju atau subur.",                // 欣欣向荣
+  "Keliru atau tidak tahu buat apa.",           // 不知所措
+  "Gelisah atau tidak selesa.",                 // 如坐针毡
+  "Pasti menang atau yakin menang.",            // 稳操胜券
+  "Tidak penting atau sangat kecil.",           // 微不足道
+  "Tidak gembira atau sedih.",                  // 闷闷不乐
+  "Berita buruk yang tiba-tiba.",               // 晴天霹雳
+  "Terkejut atau tidak percaya.",               // 目瞪口呆
+  "Terbaik atau nombor satu.",                  // 首屈一指
+  "Penuh parut atau luka."                      // 伤痕累累
+
+  ],
+
+  enMeaning: [
+  
+  "Father's father.",                             // 爷爷
+  "A writing skill to make sentences beautiful.", // 修辞手法
+  "Not old.",                                     // 年轻
+  "To pass by or go through.",                    // 经过
+  "To face something.",                           // 面对
+  "Something that happens.",                      // 事情
+  "A custom passed down from long ago.",          // 传统
+  "A small worm that lives in the soil.",         // 蚯蚓
+  "Connected or related.",                        // 有关
+  "To see with your eyes.",                       // 看见
+  "To write out.",                                // 写出
+  "For that reason.",                             // 所以
+  "To give or prepare.",                          // 提供
+  "To enjoy or feel happy about.",                // 喜欢
+  "A location.",                                  // 地方
+  "The level of study.",                          // 年级
+  "A reply to a question.",                       // 答案
+  "Cannot or must not.",                          // 不可
+  "To find something new.",                       // 发现
+  "Points to something far.",                     // 那个
+  "Being alive or life.",                         // 生命
+  "A historical figure from the Three Kingdoms.", // 孟获
+  "A small animal.",                              // 动物
+  "To understand.",                               // 理解
+  "A king in ancient China.",                     // 赵王
+  "A feeling in the heart.",                      // 心情
+  "Other people or things.",                      // 其他
+  "Is exactly.",                                  // 就是
+  "The Chinese subject.",                         // 语文
+  "A short part of a text.",                      // 一段
+  "Cannot or not able to.",                       // 不能
+  "The woman who gave birth to us.",              // 母亲
+  "A tale or account of events.",                 // 故事
+  "Things used for reference.",                   // 资料
+  "Very or extremely.",                           // 十分
+  "Things to play with.",                         // 游戏
+  "A polite word for a man.",                     // 先生
+  "To happen or take place.",                     // 发生
+  "A very large stone.",                          // 巨石
+  "Other people.",                                // 别人
+  "To describe.",                                 // 形容
+  "To show or indicate.",                         // 表示
+  "A written text.",                              // 文章
+  "To get or receive.",                           // 得到
+  "The natural world.",                           // 自然
+  "A person who owns something.",                 // 主人
+  "But or however.",                              // 可是
+  "To come to a place.",                          // 来到
+  "To find out.",                                 // 找出
+  "Almost the same.",                             // 相近
+  "A plant used to make flour.",                  // 麦子
+  "One part of a book.",                          // 单元
+  "To come out.",                                 // 出来
+  "Things you learn.",                            // 知识
+  "At this time.",                                // 现在
+  "A hero in ancient China.",                     // 岳飞
+  "Following in time.",                           // 以后
+  "People in your family.",                       // 家人
+  "The internet.",                                // 网络
+  "But or however.",                              // 但是
+  "One kind or type.",                            // 一种
+  "A way to do something.",                       // 方法
+  "Which ones.",                                  // 哪些
+  "One side or at the same time.",                // 一边
+  "The body part used to see.",                   // 眼睛
+  "To try hard.",                                 // 努力
+  "To come down.",                                // 下来
+  "This kind.",                                   // 这种
+  "A thing or item.",                             // 东西
+  "A poet from the Three Kingdoms period.",       // 曹植
+  "Soldiers who fight in a war.",                 // 军队
+  "A country in Southeast Asia.",                 // 泰国
+  "Will not or cannot.",                          // 不会
+  "To receive or get.",                           // 受到
+  "Finally or at last.",                          // 终于
+  "To get ready.",                                // 准备
+  "To pick one thing.",                           // 选择
+  "Singing together in a group.",                 // 合唱
+  "Only or just.",                                // 只有
+  "Being honest and trustworthy.",                // 诚信
+  "A medical scientist in ancient China.",        // 葛洪
+  "On the ground.",                               // 地上
+  "In the heart or mind.",                        // 心里
+  "The army of the State of Zhao.",               // 赵军
+  "To change into.",                              // 成为
+  "A place for farming.",                         // 农场
+  "Some people.",                                 // 有人
+  "Cannot or not able to.",                       // 无法
+  "A person who treats sick people.",             // 医生
+  "An ancient state in China.",                   // 齐国
+  "Thriving and growing well.",                   // 欣欣向荣
+  "Not knowing what to do; confused.",            // 不知所措
+  "Feeling very uneasy, like sitting on pins.",   // 如坐针毡
+  "Sure to win; having full confidence.",         // 稳操胜券
+  "Very small and not important.",                // 微不足道
+  "Unhappy and in a bad mood.",                   // 闷闷不乐
+  "A sudden unexpected bad event.",               // 晴天霹雳
+  "Stunned or shocked with eyes wide open.",      // 目瞪口呆
+  "The best; second to none.",                    // 首屈一指
+  "Covered with many scars."                      // 伤痕累累
+
+  ],
+
+
+
+    zhSentences: [
+  
+  "**爷爷**在公园散步。",                         // 爷爷
+  "我们在学**修辞手法**。",                       // 修辞手法
+  "他看起来很**年轻**。",                         // 年轻
+  "我每天**经过**这家店。",                       // 经过
+  "我们要勇敢**面对**困难。",                     // 面对
+  "这是一件开心的**事情**。",                     // 事情
+  "这是我们的**传统**。",                         // 传统
+  "泥土里有一条**蚯蚓**。",                       // 蚯蚓
+  "这件事和我**有关**。",                         // 有关
+  "我**看见**了一只小鸟。",                       // 看见
+  "请**写出**你的名字。",                         // 写出
+  "下雨了，**所以**我们不出门。",                 // 所以
+  "老师**提供**很多资料。",                       // 提供
+  "我**喜欢**吃苹果。",                           // 喜欢
+  "这个**地方**很美。",                           // 地方
+  "我读三**年级**。",                             // 年级
+  "请告诉我**答案**。",                           // 答案
+  "我们**不可**以乱丢垃圾。",                     // 不可
+  "我**发现**了一只小鸟。",                       // 发现
+  "**那个**孩子很可爱。",                         // 那个
+  "**生命**很宝贵。",                             // 生命
+  "**孟获**是三国时期的人物。",                   // 孟获
+  "我喜欢小**动物**。",                           // 动物
+  "我**理解**你的意思。",                         // 理解
+  "**赵王**是古代的国王。",                       // 赵王
+  "我今天**心情**很好。",                         // 心情
+  "**其他**同学也在做功课。",                     // 其他
+  "他**就是**我的哥哥。",                         // 就是
+  "我喜欢上**语文**课。",                         // 语文
+  "请读这**一段**话。",                           // 一段
+  "我**不能**帮你。",                             // 不能
+  "**母亲**很爱我。",                             // 母亲
+  "妈妈给我讲了**故事**。",                       // 故事
+  "老师提供很多**资料**。",                       // 资料
+  "这朵花**十分**美丽。",                         // 十分
+  "弟弟在玩**游戏**。",                           // 游戏
+  "这位**先生**是我的老师。",                     // 先生
+  "这件事**发生**在昨天。",                       // 发生
+  "路上有一块**巨石**。",                         // 巨石
+  "不要管**别人**怎么说。",                       // 别人
+  "请**形容**一下这朵花。",                       // 形容
+  "这个符号**表示**停止。",                       // 表示
+  "这篇文章是一篇好**文章**。",                   // 文章
+  "我**得到**了一份礼物。",                       // 得到
+  "我们要保护大**自然**。",                       // 自然
+  "他是这间屋子的**主人**。",                     // 主人
+  "我想去，**可是**下雨了。",                     // 可是
+  "他**来到**了学校。",                           // 来到
+  "请**找出**正确的答案。",                       // 找出
+  "这两个字意思**相近**。",                       // 相近
+  "田里种了很多**麦子**。",                       // 麦子
+  "今天我们学第一**单元**。",                     // 单元
+  "请**出来**一下。",                             // 出来
+  "我学到了很多**知识**。",                       // 知识
+  "**现在**几点了？",                             // 现在
+  "**岳飞**是中国古代的英雄。",                   // 岳飞
+  "放学**以后**，我们回家。",                     // 以后
+  "我的**家人**很爱我。",                         // 家人
+  "我每天上网看**网络**新闻。",                   // 网络
+  "我想去，**但是**下雨了。",                     // 但是
+  "这是**一种**新的方法。",                       // 一种
+  "这是一个好**方法**。",                         // 方法
+  "你喜欢**哪些**书？",                           // 哪些
+  "他**一边**走路，一边唱歌。",                   // 一边
+  "我的**眼睛**很累。",                           // 眼睛
+  "我要**努力**学习。",                           // 努力
+  "请**下来**吃饭。",                             // 下来
+  "我**这种**做法是对的。",                       // 这种
+  "桌子上有很多**东西**。",                       // 东西
+  "**曹植**是三国时期的诗人。",                   // 曹植
+  "**军队**在保卫国家。",                         // 军队
+  "**泰国**是一个美丽的国家。",                   // 泰国
+  "我**不会**做这道题。",                         // 不会
+  "他**受到**了老师的称赞。",                     // 受到
+  "他**终于**考到了第一名。",                     // 终于
+  "我**准备**去旅行。",                           // 准备
+  "请**选择**正确的答案。",                       // 选择
+  "我们班在**合唱**比赛得了第一名。",             // 合唱
+  "我**只有**一本书。",                           // 只有
+  "做人要有**诚信**。",                           // 诚信
+  "**葛洪**是中国古代的医学家。",                 // 葛洪
+  "书掉在**地上**。",                             // 地上
+  "我**心里**很开心。",                           // 心里
+  "**赵军**是赵国的军队。",                       // 赵军
+  "他长大后**成为**了一名医生。",                 // 成为
+  "爷爷在**农场**里种菜。",                       // 农场
+  "**有人**在敲门。",                             // 有人
+  "我**无法**帮你。",                             // 无法
+  "**医生**在治疗病人。",                         // 医生
+  "**齐国**是古代的一个国家。",                   // 齐国
+  "春天来了，大地**欣欣向荣**。",                 // 欣欣向荣
+  "他**不知所措**地站在那里。",                   // 不知所措
+  "他**如坐针毡**，非常不安。",                   // 如坐针毡
+  "我们**稳操胜券**，一定会赢。",                 // 稳操胜券
+  "这件事**微不足道**，不要在意。",               // 微不足道
+  "他**闷闷不乐**地坐在那里。",                   // 闷闷不乐
+  "这消息简直是**晴天霹雳**。",                   // 晴天霹雳
+  "他吓得**目瞪口呆**。",                         // 目瞪口呆
+  "他的成绩在我们班是**首屈一指**的。",           // 首屈一指
+  "他的手脚**伤痕累累**。"                        // 伤痕累累
+
+    ],
+
+
+    enSentences: [
+  
+  "**Grandfather** walks in the park.",            // 爷爷
+  "We are learning **rhetorical device**.",        // 修辞手法
+  "He looks very **young**.",                      // 年轻
+  "I **pass by** this shop every day.",            // 经过
+  "We must bravely **face** difficulties.",        // 面对
+  "This is a happy **matter**.",                   // 事情
+  "This is our **tradition**.",                    // 传统
+  "There is an **earthworm** in the soil.",        // 蚯蚓
+  "This matter is **related** to me.",             // 有关
+  "I **see** a small bird.",                       // 看见
+  "Please **write out** your name.",               // 写出
+  "It rained, **so** we did not go out.",          // 所以
+  "The teacher **provide** a lot of material.",    // 提供
+  "I **like** to eat apples.",                     // 喜欢
+  "This **place** is very beautiful.",             // 地方
+  "I am in **grade** three.",                      // 年级
+  "Please tell me the **answer**.",                // 答案
+  "We **cannot** throw rubbish everywhere.",       // 不可
+  "I **discover** a small bird.",                  // 发现
+  "**That** child is very cute.",                  // 那个
+  "**Life** is very precious.",                    // 生命
+  "**Meng Huo** is a figure from the Three Kingdoms.", // 孟获
+  "I like small **animal**.",                      // 动物
+  "I **understand** your meaning.",                // 理解
+  "**King of Zhao** was an ancient king.",         // 赵王
+  "My **mood** is very good today.",               // 心情
+  "**Other** students are also doing their homework.", // 其他
+  "He **is exactly** my brother.",                 // 就是
+  "I like to learn **Chinese language**.",         // 语文
+  "Please read **a paragraph**.",                  // 一段
+  "I **cannot** help you.",                        // 不能
+  "**Mother** loves me very much.",                // 母亲
+  "Mother told me a **story**.",                   // 故事
+  "The teacher provides a lot of **material**.",   // 资料
+  "This flower is **very** beautiful.",            // 十分
+  "My brother is playing a **game**.",             // 游戏
+  "This **mister** is my teacher.",                // 先生
+  "This **happen** yesterday.",                    // 发生
+  "There is a **boulder** on the road.",           // 巨石
+  "Don't mind **other people**.",                  // 别人
+  "Please **describe** this flower.",              // 形容
+  "This symbol **show** stop.",                    // 表示
+  "This is a good **article**.",                   // 文章
+  "I **get** a gift.",                             // 得到
+  "We must protect **nature**.",                   // 自然
+  "He is the **owner** of this house.",            // 主人
+  "I want to go, **but** it is raining.",          // 可是
+  "He **come to** school.",                        // 来到
+  "Please **find out** the correct answer.",       // 找出
+  "These two words are **similar**.",              // 相近
+  "There is a lot of **wheat** in the field.",     // 麦子
+  "Today we learn the first **unit**.",            // 单元
+  "Please **come out** for a while.",              // 出来
+  "I learned a lot of **knowledge**.",             // 知识
+  "**Now** what time is it?",                      // 现在
+  "**Yue Fei** was an ancient Chinese hero.",      // 岳飞
+  "**After** school, we go home.",                 // 以后
+  "My **family member** loves me very much.",      // 家人
+  "I read **network** news every day.",            // 网络
+  "I want to go, **but** it is raining.",          // 但是
+  "This is **one kind** of new method.",           // 一种
+  "This is a good **method**.",                    // 方法
+  "**Which** books do you like?",                  // 哪些
+  "He walks **one side** while singing.",          // 一边
+  "My **eyes** are very tired.",                   // 眼睛
+  "I want to **effort** study.",                   // 努力
+  "Please **come down** to eat.",                  // 下来
+  "**This kind** is correct.",                     // 这种
+  "There are many **thing** on the table.",        // 东西
+  "**Cao Zhi** is a poet from the Three Kingdoms.", // 曹植
+  "The **army** is defending the country.",        // 军队
+  "**Thailand** is a beautiful country.",          // 泰国
+  "I **will not** answer this question.",          // 不会
+  "He **receive** praise from the teacher.",       // 受到
+  "He **finally** got first place.",               // 终于
+  "I am **prepare** to travel.",                   // 准备
+  "Please **choose** the correct answer.",         // 选择
+  "Our class won first place in the **chorus**.",  // 合唱
+  "I **only** have one book.",                     // 只有
+  "We must have **honesty**.",                     // 诚信
+  "**Ge Hong** was an ancient Chinese medical scientist.", // 葛洪
+  "The book fell **on the ground**.",              // 地上
+  "I am happy **in the heart**.",                  // 心里
+  "The **Zhao army** is the army of the State of Zhao.", // 赵军
+  "He wants to **become** a doctor.",              // 成为
+  "Grandfather plants vegetables on the **farm**.", // 农场
+  "**Someone** is knocking on the door.",          // 有人
+  "I **cannot** help you.",                        // 无法
+  "The **doctor** is treating the patient.",       // 医生
+  "The **State of Qi** is an ancient country.",    // 齐国
+  "Spring has come, the earth is **thriving**.",   // 欣欣向荣
+  "He stood there **at a loss**.",                 // 不知所措
+  "He is **on pins and needles**, very uneasy.",   // 如坐针毡
+  "We are **sure to win**, we will win.",          // 稳操胜券
+  "This matter is **insignificant**, do not mind.", // 微不足道
+  "He sat there **unhappy**.",                     // 闷闷不乐
+  "This news is like **a bolt from the blue**.",   // 晴天霹雳
+  "He was **stunned**.",                           // 目瞪口呆
+  "His results are **second to none** in our class.", // 首屈一指
+  "His hands are **covered in scars**."            // 伤痕累累
+
+  ],
+
+    
+    msSentences: [
+    
+  "**Atuk** berjalan di taman.",                   // 爷爷
+  "Kami belajar **gaya bahasa**.",                 // 修辞手法
+  "Dia kelihatan sangat **muda**.",                // 年轻
+  "Saya **melalui** kedai ini setiap hari.",       // 经过
+  "Kita harus berani **menghadapi** cabaran.",     // 面对
+  "Ini satu **perkara** yang baik.",               // 事情
+  "Ini ialah **tradisi** kita.",                   // 传统
+  "Ada seekor **cacing tanah** di dalam tanah.",   // 蚯蚓
+  "Perkara ini **berkaitan** dengan saya.",        // 有关
+  "Saya **nampak** seekor burung kecil.",          // 看见
+  "Sila **tulis** nama kamu.",                     // 写出
+  "Hujan turun, **oleh itu** kami tidak keluar.",  // 所以
+  "Cikgu **menyediakan** banyak bahan.",           // 提供
+  "Saya **suka** makan epal.",                     // 喜欢
+  "**Tempat** ini sangat cantik.",                 // 地方
+  "Saya belajar dalam **tahun** tiga.",            // 年级
+  "Sila beritahu saya **jawapan**.",               // 答案
+  "Kita **tidak boleh** membuang sampah.",         // 不可
+  "Saya **menemui** seekor burung kecil.",         // 发现
+  "**Itu** budak sangat comel.",                   // 那个
+  "**Nyawa** sangat berharga.",                    // 生命
+  "**Meng Huo** ialah tokoh zaman Tiga Kerajaan.", // 孟获
+  "Saya suka **haiwan** kecil.",                   // 动物
+  "Saya **faham** maksud kamu.",                   // 理解
+  "**Raja Zhao** ialah raja zaman dahulu.",        // 赵王
+  "**Perasaan** saya sangat baik hari ini.",       // 心情
+  "**Lain** murid juga sedang membuat kerja rumah.", // 其他
+  "Dia **ialah** abang saya.",                     // 就是
+  "Saya suka belajar **Bahasa Cina**.",            // 语文
+  "Sila baca **satu perenggan** ini.",             // 一段
+  "Saya **tidak boleh** menolong anda.",           // 不能
+  "**Ibu** sangat menyayangi saya.",               // 母亲
+  "Ibu menceritakan satu **cerita** kepada saya.", // 故事
+  "Cikgu memberikan banyak **bahan**.",            // 资料
+  "Bunga ini **sangat** cantik.",                  // 十分
+  "Adik bermain **permainan**.",                   // 游戏
+  "**Tuan** itu guru saya.",                       // 先生
+  "Perkara ini **berlaku** semalam.",              // 发生
+  "Terdapat **batu besar** di jalan.",             // 巨石
+  "Jangan pedulikan **orang lain**.",              // 别人
+  "Sila **menggambarkan** bunga ini.",             // 形容
+  "Simbol ini **menunjukkan** berhenti.",          // 表示
+  "Ini ialah **artikel** yang baik.",              // 文章
+  "Saya **mendapat** satu hadiah.",                // 得到
+  "Kita harus menjaga **alam semula jadi**.",      // 自然
+  "Dia ialah **tuan** rumah ini.",                 // 主人
+  "Saya mahu pergi, **tetapi** hujan.",            // 可是
+  "Dia **datang ke** sekolah.",                    // 来到
+  "Sila **cari** jawapan yang betul.",             // 找出
+  "Dua perkataan ini **hampir sama**.",            // 相近
+  "Di ladang ada banyak **gandum**.",              // 麦子
+  "Hari ini kita belajar **unit** pertama.",       // 单元
+  "Sila **keluar** sebentar.",                     // 出来
+  "Saya belajar banyak **pengetahuan**.",          // 知识
+  "**Sekarang** pukul berapa?",                    // 现在
+  "**Yue Fei** ialah pahlawan zaman dahulu.",      // 岳飞
+  "**Selepas** sekolah, kami balik.",              // 以后
+  "**Ahli keluarga** saya sangat menyayangi saya.", // 家人
+  "Saya melihat berita **rangkaian** setiap hari.", // 网络
+  "Saya mahu pergi, **tetapi** hujan.",            // 但是
+  "Ini ialah **satu jenis** kaedah baharu.",       // 一种
+  "Ini ialah satu **kaedah** yang baik.",          // 方法
+  "Buku **yang mana** kamu suka?",                 // 哪些
+  "Dia berjalan **sebelah** sambil menyanyi.",     // 一边
+  "**Mata** saya sangat letih.",                   // 眼睛
+  "Saya mahu **usaha** belajar.",                  // 努力
+  "Sila **turun** untuk makan.",                   // 下来
+  "**Jenis ini** betul.",                          // 这种
+  "Terdapat banyak **benda** di atas meja.",       // 东西
+  "**Cao Zhi** ialah penyair zaman Tiga Kerajaan.", // 曹植
+  "**Tentera** sedang mempertahankan negara.",     // 军队
+  "**Thailand** ialah negara yang cantik.",        // 泰国
+  "Saya **tidak akan** menjawab soalan ini.",      // 不会
+  "Dia **menerima** pujian daripada cikgu.",       // 受到
+  "Dia **akhirnya** mendapat tempat pertama.",     // 终于
+  "Saya **bersedia** untuk melancong.",            // 准备
+  "Sila **memilih** jawapan yang betul.",          // 选择
+  "Kelas kami mendapat tempat pertama dalam **korus**.", // 合唱
+  "Saya **hanya** ada satu buku.",                 // 只有
+  "Kita mesti ada **kejujuran**.",                 // 诚信
+  "**Ge Hong** ialah ahli perubatan zaman dahulu.", // 葛洪
+  "Buku jatuh ke **di atas tanah**.",              // 地上
+  "Saya rasa gembira **dalam hati**.",             // 心里
+  "**Tentera Zhao** ialah tentera negeri Zhao.",   // 赵军
+  "Dia mahu **menjadi** seorang doktor.",          // 成为
+  "Atuk menanam sayur di **ladang**.",             // 农场
+  "**Ada orang** mengetuk pintu.",                 // 有人
+  "Saya **tidak dapat** menolong anda.",           // 无法
+  "**Doktor** sedang merawat pesakit.",            // 医生
+  "**Negeri Qi** ialah negara purba.",             // 齐国
+  "Musim bunga tiba, bumi **berkembang maju**.",   // 欣欣向荣
+  "Dia berdiri di situ dengan **keliru**.",        // 不知所措
+  "Dia **gelisah**, sangat tidak selesa.",         // 如坐针毡
+  "Kami **pasti menang**, akan menang.",           // 稳操胜券
+  "Perkara ini **tidak penting**, jangan peduli.", // 微不足道
+  "Dia duduk di situ dengan **tidak gembira**.",   // 闷闷不乐
+  "Berita ini seperti **berita buruk tiba-tiba**.", // 晴天霹雳
+  "Dia **terkejut** hingga tidak percaya.",        // 目瞪口呆
+  "Keputusannya **terbaik** dalam kelas kami.",    // 首屈一指
+  "Tangannya **penuh parut**."                     // 伤痕累累
+
+  ]
+  },
+
+  "Set 3": {
+    zh: ["篮球", "老师", "学校"],
+    py: ["lán qiú", "lǎo shī", "xué xiào"],
+    en: ["basketball", "teacher", "school"],
+    ms: ["bola keranjang", "guru", "sekolah"],
+    zhSentences: [
+      "我喜欢打篮球。",
+      "我的老师很亲切。",
+      "我每天去学校上课。"
+    ],
+    enSentences: [
+      "I like playing basketball.",
+      "My teacher is very kind.",
+      "I go to school every day."
+    ],
+    msSentences: [
+      "Saya suka bermain bola keranjang.",
+      "Guru saya sangat baik hati.",
+      "Saya pergi ke sekolah setiap hari."
+    ]
+  }
+};
+
+let activeSet = wordSets["Set 1"];
+
+    // ===== DOM & 语音 =====
+    let currentIndex = 0;
+    const questionDiv = document.getElementById('question');
+    const wordDiv = document.getElementById('word');
+    const pinyinDiv = document.getElementById('pinyin');
+    const meaningDiv = document.getElementById('meaning');
+
+    function setMeaning(text) { meaningDiv.textContent = text || ''; }
+
+    // 统一的朗读函数（默认：慢速 0.4、音高 0.6）
+    function speak(text, lang, preferNames = [], rate = 1.0, pitch = 0.6) {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = lang;
+      u.rate = rate;
+      u.pitch = pitch;
+
+      const trySpeak = () => {
+        const voices = speechSynthesis.getVoices() || [];
+        let candidates = voices.filter(v => (v.lang || '').toLowerCase().startsWith(lang.toLowerCase()));
+        // 如果没有马来语，回退印尼语
+        if (!candidates.length && lang.toLowerCase().startsWith('ms')) {
+          candidates = voices.filter(v => (v.lang || '').toLowerCase().startsWith('id'));
+          if (candidates.length) u.lang = 'id-ID';
+        }
+        for (const key of preferNames) {
+          const found = candidates.find(v => (v.name || '').toLowerCase().includes(key.toLowerCase()));
+          if (found) { u.voice = found; break; }
+        }
+        if (!u.voice && candidates.length) u.voice = candidates[0];
+        speechSynthesis.cancel();
+        speechSynthesis.speak(u);
+      };
+
+      if (speechSynthesis.getVoices().length === 0) {
+        speechSynthesis.onvoiceschanged = trySpeak;
+      }
+      trySpeak();
+    }
+
+    // ===== 华文为主（按钮函数不再覆盖速率/音高）=====
+    function playChineseWord() {
+  const text = activeSet.zh[currentIndex] || '';
+  const pinyin = activeSet.py[currentIndex] || '';
+
+  setMeaning(pinyin);
+  speak(text, 'zh-CN', ['Xiaoyi','Microsoft','male']);
+}
+
+    function showEnglish() {
+  const text = activeSet.en[currentIndex] || '(待添加英文)';
+  setMeaning(text);
+  speak(text, 'en-US', ['Google','Microsoft','Natural']);
+}
+
+    function showMalay() {
+  const text = activeSet.ms[currentIndex] || '(待添加马来文)';
+  setMeaning(text);
+  speak(text, 'ms-MY', ['Malay','Bahasa','Microsoft']);
+}
+
+// ===== 真正含义 =====
+
+function showTrueChinese() {
+  const text = activeSet.zhMeaning[currentIndex] || '暂时没有华文解释';
+  setMeaning(text);
+  speak(text, 'zh-CN', ['Xiaoyi', 'Microsoft']);
+}
+
+function showTrueMalay() {
+  const text = activeSet.msMeaning[currentIndex] || 'Tiada penerangan Bahasa Melayu';
+  setMeaning(text);
+  speak(text, 'ms-MY', ['Microsoft', 'Malay', 'Bahasa']);
+}
+
+function showTrueEnglish() {
+  const text = activeSet.enMeaning[currentIndex] || 'No English explanation available';
+  setMeaning(text);
+  speak(text, 'en-US', ['Google', 'Microsoft', 'Natural']);
+}
+
+    function showChineseSentence() {
+  const text = activeSet.zhSentences[currentIndex] || '(待添加华文造句)';
+  setMeaning(text);
+  speak(text, 'zh-CN', ['Xiaoyi','Microsoft']);
+}
+
+    function showEnglishSentence() {
+  const text = activeSet.enSentences[currentIndex] || '(待添加英文句子)';
+  setMeaning(text);
+  speak(text, 'en-US', ['Google','Microsoft']);
+}
+
+    function showMalaySentence() {
+  const text = activeSet.msSentences[currentIndex] || '(待添加马来文句子)';
+  setMeaning(text);
+  speak(text, 'ms-MY', ['Malay','Bahasa','Microsoft']);
+}
+
+    function nextWord() {
+      if (currentIndex < activeSet.zh.length - 1) {
+        currentIndex++;
+        updateQuestion();
+      }
+    }
+
+    function prevWord() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updateQuestion();
+      }
+    }
+
+    function updateQuestion() {
+  questionDiv.innerText = `题目 ${currentIndex + 1}`;
+  wordDiv.innerText = activeSet.zh[currentIndex] || '—';
+  setMeaning('');
+}
+
+
+// ===== 搜索功能 =====
+function searchWord() {
+
+  const keyword = document.getElementById("searchInput").value.trim();
+
+  if (!keyword) {
+    alert("请输入要搜索的词语");
+    return;
+  }
+
+
+  const index = activeSet.zh.indexOf(keyword);
+
+
+  if (index !== -1) {
+
+    currentIndex = index;
+    updateQuestion();
+
+  } else {
+
+    alert("没有找到：" + keyword);
+
+  }
+
+}
+
+function goToReadingTest() {
+  const selectedSet = document.getElementById("setSelect").value;
+
+  window.location.href = `Reading/ReadingTest${selectedSet.replace("Set ", "Set")}.html`;
+}
+
+function goToMeaningTest() {
+  const selectedSet = document.getElementById("setSelect").value;
+
+  window.location.href = `Meaning/MeaningTest${selectedSet.replace("Set ", "Set")}.html`;
+}
+
+function changeSet() {
+  const selectedSet = document.getElementById("setSelect").value;
+
+  if (!wordSets[selectedSet]) return;
+
+  activeSet = wordSets[selectedSet];
+
+  currentIndex = 0;
+  updateQuestion();
+}
+
+updateQuestion();
+  </script>
+</body>
+</html>
